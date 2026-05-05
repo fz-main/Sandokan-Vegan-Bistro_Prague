@@ -1,1672 +1,743 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sandokan Vegan Bistro - Prague</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
-  <style>
-    /* ═══════════════════════════════════════
-       GLOBAL VARIABLES & THEME
-    ═══════════════════════════════════════ */
-    :root {
-      --primary-green: #4CAF50; /* Vibrant green */
-      --secondary-green-light: #8BC34A; /* Lighter, fresh green */
-      --accent-gold: #FFC107; /* Warm, inviting gold */
-      --text-light: #e0e0e0; /* Light text for dark backgrounds */
-      --text-muted: #a0a0a0; /* Muted text */
-      --dark-bg: #212121; /* Deep dark grey/black */
-      --dark-bg-alt: #303030; /* Slightly lighter dark */
-      --card-bg: rgba(48, 48, 48, 0.8); /* Semi-transparent card background */
-      --border-color: rgba(255, 193, 7, 0.2); /* Gold border accent */
-      --shadow-color: rgba(0, 0, 0, 0.4);
-      --footer-bg: #1a1a1a;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandokan Vegan Bistro | Praha 3 Vinohrady</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d5a27;
+  --lime: #7fb23a;
+  --gold: #c9a84c;
+  --cream: #f5f0e8;
+  --dark: #1a1a14;
+  --text: #2c2c1e;
+  --muted: #6b6b50;
+  --white: #ffffff;
+}
 
-    /* ═══════════════════════════════════════
-       GLOBAL STYLES
-    ═══════════════════════════════════════ */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--dark-bg);
-      color: var(--text-light);
-      font-family: 'Montserrat', sans-serif;
-      overflow-x: hidden;
-      line-height: 1.6;
-      opacity: 0; /* Initially hidden, revealed by loader */
-      transition: opacity 1s ease-in-out;
-    }
-    body.loaded { opacity: 1; }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--cream);overflow-x:hidden;cursor:none;}
 
-    /* ═══════════════════════════════════════
-       LOADER ANIMATION
-    ═══════════════════════════════════════ */
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle, var(--dark-bg) 60%, var(--dark-bg-alt) 100%);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      transition: opacity 1s ease-in-out;
-    }
+/* CUSTOM CURSOR */
+.cursor{position:fixed;width:12px;height:12px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s,width .2s,height .2s,background .2s;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(127,178,58,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .25s ease,width .2s,height .2s;}
+.cursor.hover{width:20px;height:20px;background:var(--gold);}
+.cursor-ring.hover{width:56px;height:56px;border-color:rgba(201,168,76,.4);}
 
-    .loader-logo {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 30px;
-      position: relative;
-      animation: pulseGlow 2s infinite ease-in-out;
-    }
-    .loader-logo path {
-      fill: none;
-      stroke: var(--accent-gold);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 500;
-      stroke-dashoffset: 500;
-      animation: drawLogo 2s forwards cubic-bezier(0.77, 0, 0.18, 1);
-    }
-    @keyframes drawLogo { to { stroke-dashoffset: 0; } }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 10px var(--accent-gold), 0 0 20px rgba(255, 193, 7, 0.4); }
-      50% { box-shadow: 0 0 15px var(--accent-gold), 0 0 30px rgba(255, 193, 7, 0.6); }
-    }
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--dark);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;}
+.loader-leaf{font-size:4rem;animation:leafSpin 1.2s ease-in-out infinite;}
+.loader-bar{width:200px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--lime),var(--gold));border-radius:2px;animation:loaderFill 1.8s ease forwards;}
+.loader-text{font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.4em;color:var(--muted);text-transform:uppercase;}
+@keyframes leafSpin{0%{transform:rotate(-15deg) scale(.9);}50%{transform:rotate(15deg) scale(1.1);}100%{transform:rotate(-15deg) scale(.9);}}
+@keyframes loaderFill{from{width:0;}to{width:100%;}}
 
-    .loader-text-main {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 8vw, 6rem);
-      font-weight: 900;
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, var(--secondary-green-light), var(--accent-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: textEnter 1.2s ease-out 1.5s forwards;
-    }
-    .loader-text-sub {
-      font-size: clamp(0.8rem, 3vw, 1.2rem);
-      letter-spacing: 2px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: textEnter 1.2s ease-out 1.8s forwards;
-      color: var(--text-muted);
-    }
-    @keyframes textEnter {
-      to { opacity: 1; transform: translateY(0); }
-    }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 5%;display:flex;align-items:center;justify-content:space-between;transition:all .4s;}
+nav.scrolled{background:rgba(26,26,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(127,178,58,.15);padding:14px 5%;}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--cream);text-decoration:none;letter-spacing:.05em;}
+.nav-logo span{color:var(--lime);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{color:rgba(245,240,232,.7);text-decoration:none;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;transition:color .3s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--lime);transition:width .3s;}
+.nav-links a:hover{color:var(--lime);}
+.nav-links a:hover::after{width:100%;}
+.lang-switcher{display:flex;gap:8px;}
+.lang-btn{background:transparent;border:1px solid rgba(245,240,232,.2);color:rgba(245,240,232,.6);padding:5px 10px;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .3s;letter-spacing:.06em;}
+.lang-btn.active,.lang-btn:hover{border-color:var(--lime);color:var(--lime);}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.nav-burger span{display:block;width:24px;height:2px;background:var(--cream);transition:all .3s;border-radius:2px;}
+.nav-mobile{display:none;position:fixed;inset:0;background:rgba(26,26,20,.97);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
+.nav-mobile.open{display:flex;}
+.nav-mobile a{font-family:'Playfair Display',serif;font-size:2rem;color:var(--cream);text-decoration:none;transition:color .3s;}
+.nav-mobile a:hover{color:var(--lime);}
+.nav-mobile .lang-switcher{margin-top:16px;}
 
-    .loader-progress {
-      width: 250px;
-      max-width: 80%;
-      height: 4px;
-      background: var(--dark-bg-alt);
-      border-radius: 2px;
-      margin-top: 40px;
-      overflow: hidden;
-      opacity: 0;
-      transform: scaleX(0.8);
-      animation: fadeInScale 1s ease-out 2s forwards;
-    }
-    .loader-progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--secondary-green-light), var(--accent-gold));
-      width: 0%;
-      border-radius: 2px;
-      animation: fillProgress 2.8s ease-in-out forwards;
-    }
-    @keyframes fillProgress { to { width: 100%; } }
-    @keyframes fadeInScale { to { opacity: 1; transform: scaleX(1); } }
+/* HERO */
+#hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 0%,rgba(45,90,39,.6),transparent),radial-gradient(ellipse 60% 60% at 80% 80%,rgba(127,178,58,.15),transparent),radial-gradient(ellipse 50% 50% at 20% 60%,rgba(201,168,76,.1),transparent),var(--dark);}
+.hero-particles{position:absolute;inset:0;overflow:hidden;}
+.particle{position:absolute;width:4px;height:4px;background:var(--lime);border-radius:50%;opacity:.4;animation:float linear infinite;}
+@keyframes float{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:.4;}90%{opacity:.4;}100%{transform:translateY(-20px) rotate(720deg);opacity:0;}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(127,178,58,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,178,58,.05) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);}
+.hero-content{position:relative;z-index:1;text-align:center;max-width:800px;padding:0 24px;}
+.hero-badge{display:inline-block;border:1px solid rgba(127,178,58,.4);padding:6px 18px;border-radius:100px;font-size:.75rem;letter-spacing:.2em;color:var(--lime);text-transform:uppercase;margin-bottom:28px;animation:fadeUp 1s .5s both;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,7rem);line-height:1;font-weight:900;margin-bottom:24px;animation:fadeUp 1s .7s both;}
+.hero-title em{color:var(--lime);font-style:italic;}
+.hero-sub{font-size:clamp(.95rem,2vw,1.15rem);color:rgba(245,240,232,.65);line-height:1.7;max-width:560px;margin:0 auto 40px;animation:fadeUp 1s .9s both;font-weight:300;}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s 1.1s both;}
+.btn{padding:14px 32px;border-radius:8px;font-size:.88rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:all .35s;display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--lime),var(--green));color:var(--white);box-shadow:0 8px 32px rgba(127,178,58,.3);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(127,178,58,.45);}
+.btn-outline{background:transparent;border:1px solid rgba(245,240,232,.3);color:var(--cream);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 1s 1.4s both;}
+.hero-scroll span{font-size:.7rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
+.scroll-line{width:1px;height:48px;background:linear-gradient(var(--lime),transparent);animation:scrollLine 1.5s ease-in-out infinite;}
+@keyframes scrollLine{0%,100%{opacity:.4;transform:scaleY(.5);}50%{opacity:1;transform:scaleY(1);}}
+.hero-stats{position:absolute;bottom:80px;right:5%;display:flex;flex-direction:column;gap:16px;animation:fadeLeft 1s 1.2s both;}
+.stat{text-align:right;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--lime);}
+.stat-label{font-size:.7rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
 
-    /* ═══════════════════════════════════════
-        BACKGROUND PARTICLES
-    ═══════════════════════════════════════ */
-    #bg-canvas {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.15;
-    }
+/* SECTIONS */
+section{padding:100px 5%;}
+.section-tag{display:inline-block;font-size:.7rem;letter-spacing:.25em;color:var(--lime);text-transform:uppercase;margin-bottom:12px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);line-height:1.15;font-weight:700;margin-bottom:20px;}
+.section-title em{color:var(--lime);font-style:italic;}
+.section-desc{color:rgba(245,240,232,.6);font-size:1rem;line-height:1.75;max-width:540px;font-weight:300;}
 
-    /* ═══════════════════════════════════════
-       NAVBAR
-    ═══════════════════════════════════════ */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 24px 50px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
-      background: linear-gradient(to bottom, var(--dark-bg) 0%, rgba(33, 33, 33, 0) 100%);
-    }
-    nav.scrolled {
-      background: var(--dark-bg-alt);
-      box-shadow: 0 5px 20px var(--shadow-color);
-      padding: 16px 50px;
-    }
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--secondary-green-light), var(--accent-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 1.5px;
-      text-decoration: none;
-      transition: transform 0.3s;
-    }
-    .nav-logo:hover { transform: scale(1.05); }
+/* ABOUT */
+#about{background:var(--dark);}
+.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;}
+.about-visual{position:relative;}
+.about-img-frame{width:100%;aspect-ratio:4/5;background:linear-gradient(135deg,var(--green),rgba(45,90,39,.3));border-radius:24px;overflow:hidden;position:relative;}
+.about-img-inner{width:100%;height:100%;background:linear-gradient(160deg,rgba(127,178,58,.2),rgba(45,90,39,.8)),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"><circle cx="200" cy="150" r="80" fill="%237fb23a" opacity=".15"/><circle cx="100" cy="350" r="60" fill="%232d5a27" opacity=".2"/><circle cx="320" cy="400" r="90" fill="%23c9a84c" opacity=".1"/></svg>');display:flex;align-items:center;justify-content:center;}
+.about-plant{font-size:8rem;filter:drop-shadow(0 0 40px rgba(127,178,58,.3));}
+.about-badge-float{position:absolute;bottom:-20px;right:-20px;background:var(--gold);color:var(--dark);padding:16px 24px;border-radius:16px;text-align:center;box-shadow:0 16px 40px rgba(0,0,0,.4);}
+.about-badge-float strong{display:block;font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;}
+.about-badge-float span{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;}
+.about-text{display:flex;flex-direction:column;gap:24px;}
+.about-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.feature-chip{background:rgba(127,178,58,.1);border:1px solid rgba(127,178,58,.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:.85rem;transition:all .3s;}
+.feature-chip:hover{background:rgba(127,178,58,.18);border-color:rgba(127,178,58,.4);transform:translateY(-2px);}
+.feature-chip .icon{font-size:1.2rem;}
 
-    .nav-links {
-      display: flex;
-      gap: 30px;
-      list-style: none;
-      align-items: center;
-    }
-    .nav-links a {
-      color: var(--text-light);
-      text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      font-weight: 500;
-      position: relative;
-      padding: 5px 0;
-      transition: color 0.3s;
-    }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent-gold);
-      transition: width 0.3s ease;
-    }
-    .nav-links a:hover { color: var(--accent-gold); }
-    .nav-links a:hover::after { width: 100%; }
+/* ADVANTAGES */
+#advantages{background:linear-gradient(180deg,var(--dark) 0%,rgba(26,26,20,.95) 100%);position:relative;overflow:hidden;}
+#advantages::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(45,90,39,.2),transparent);}
+.adv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:1200px;margin:56px auto 0;}
+.adv-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:36px 28px;position:relative;overflow:hidden;transition:all .4s;group:hover;}
+.adv-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(127,178,58,.08),transparent);opacity:0;transition:opacity .4s;border-radius:20px;}
+.adv-card:hover{transform:translateY(-6px);border-color:rgba(127,178,58,.3);box-shadow:0 24px 60px rgba(0,0,0,.3);}
+.adv-card:hover::before{opacity:1;}
+.adv-icon{font-size:2.4rem;margin-bottom:20px;display:block;}
+.adv-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:12px;color:var(--cream);}
+.adv-text{color:rgba(245,240,232,.55);font-size:.88rem;line-height:1.7;font-weight:300;}
 
-    .lang-switcher { display: flex; gap: 8px; }
-    .lang-btn {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 5px 12px;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.3s;
-      font-family: 'Montserrat', sans-serif;
-    }
-    .lang-btn:hover, .lang-btn.active {
-      background: var(--accent-gold);
-      border-color: var(--accent-gold);
-      color: var(--dark-bg);
-      font-weight: 600;
-    }
+/* MENU */
+#menu{background:rgba(20,22,16,.98);}
+.menu-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 48px;max-width:1200px;margin-left:auto;margin-right:auto;}
+.menu-tab{background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(245,240,232,.5);padding:10px 22px;border-radius:100px;font-size:.8rem;letter-spacing:.06em;cursor:pointer;transition:all .3s;text-transform:uppercase;}
+.menu-tab.active,.menu-tab:hover{background:var(--lime);border-color:var(--lime);color:var(--dark);}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;max-width:1200px;margin:0 auto;}
+.menu-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden;transition:all .4s;position:relative;}
+.menu-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 24px 60px rgba(0,0,0,.4);border-color:rgba(127,178,58,.25);}
+.menu-card-img{width:100%;aspect-ratio:16/10;background:linear-gradient(135deg,var(--green),rgba(45,90,39,.4));display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden;}
+.menu-card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(20,22,16,.8));pointer-events:none;}
+.menu-card-body{padding:20px 24px 24px;}
+.menu-card-tag{font-size:.68rem;letter-spacing:.15em;color:var(--lime);text-transform:uppercase;margin-bottom:6px;}
+.menu-card-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:8px;}
+.menu-card-desc{font-size:.83rem;color:rgba(245,240,232,.5);line-height:1.6;font-weight:300;}
+.menu-card-price{font-size:.9rem;font-weight:500;color:var(--gold);margin-top:14px;}
+.menu-card-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.badge{font-size:.65rem;padding:3px 9px;border-radius:100px;border:1px solid;}
+.badge-v{border-color:rgba(127,178,58,.4);color:var(--lime);}
+.badge-gf{border-color:rgba(201,168,76,.4);color:var(--gold);}
+.menu-note{text-align:center;color:rgba(245,240,232,.4);font-size:.83rem;margin-top:40px;max-width:1200px;margin-left:auto;margin-right:auto;padding:0 24px;}
 
-    .burger {
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-      cursor: pointer;
-      padding: 5px;
-    }
-    .burger span {
-      display: block; width: 24px; height: 3px; background: var(--accent-gold); border-radius: 2px;
-      transition: all 0.4s cubic-bezier(.25,.8,.25,1);
-    }
-    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .burger.open span:nth-child(2) { opacity: 0; }
-    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* HOURS + CONTACT */
+#contact{background:linear-gradient(160deg,rgba(26,26,20,1),rgba(30,36,20,1));}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1200px;margin:0 auto;}
+.hours-card{background:rgba(127,178,58,.06);border:1px solid rgba(127,178,58,.15);border-radius:24px;padding:40px;}
+.hours-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.hours-row:last-child{border-bottom:none;}
+.hours-day{font-size:.88rem;color:rgba(245,240,232,.6);}
+.hours-time{font-size:.88rem;font-weight:500;color:var(--lime);}
+.hours-time.closed{color:var(--muted);}
+.contact-info{display:flex;flex-direction:column;gap:24px;}
+.contact-item{display:flex;gap:16px;align-items:flex-start;}
+.contact-icon{width:44px;height:44px;background:rgba(127,178,58,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.contact-item-text strong{display:block;font-size:.78rem;letter-spacing:.1em;color:var(--lime);text-transform:uppercase;margin-bottom:4px;}
+.contact-item-text a{color:var(--cream);text-decoration:none;transition:color .3s;}
+.contact-item-text a:hover{color:var(--lime);}
 
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(33, 33, 33, 0.98);
-      z-index: 99;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 35px;
-      padding: 20px;
-      transform: translateY(-100%);
-      transition: transform 0.6s cubic-bezier(.25,.8,.25,1);
-    }
-    .mobile-menu.open { transform: translateY(0); }
-    .mobile-menu a {
-      color: var(--text-light);
-      text-decoration: none;
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      transition: color 0.3s;
-    }
-    .mobile-menu a:hover { color: var(--accent-gold); }
+/* MAP */
+#map-section{background:var(--dark);padding:0;}
+.map-header{padding:80px 5% 40px;max-width:1200px;margin:0 auto;}
+.map-container{position:relative;}
+.map-container iframe{width:100%;height:480px;border:0;display:block;filter:grayscale(30%) contrast(1.05);}
+.map-overlay{position:absolute;top:24px;left:5%;background:rgba(26,26,20,.9);backdrop-filter:blur(16px);border:1px solid rgba(127,178,58,.2);border-radius:16px;padding:20px 24px;max-width:280px;}
+.map-overlay strong{display:block;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:6px;}
+.map-overlay span{font-size:.82rem;color:rgba(245,240,232,.55);line-height:1.5;display:block;}
+.map-overlay a{display:inline-flex;align-items:center;gap:6px;color:var(--lime);font-size:.8rem;text-decoration:none;margin-top:12px;transition:gap .3s;}
+.map-overlay a:hover{gap:10px;}
 
-    /* ═══════════════════════════════════════
-       HERO SECTION
-    ═══════════════════════════════════════ */
-    #hero {
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      text-align: center;
-      padding: 0 20px;
-      z-index: 1;
-      background: radial-gradient(circle at 30% 20%, rgba(76,175,80,0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 80%, rgba(255,193,7,0.1) 0%, transparent 50%),
-                  var(--dark-bg);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      animation: heroSlideIn 1.5s cubic-bezier(0.22,1,0.36,1) 2.8s both;
-    }
-    @keyframes heroSlideIn {
-      from { opacity: 0; transform: translateY(50px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
+/* FOOTER */
+footer{background:rgba(15,15,12,1);padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.06);}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:12px;color:var(--cream);}
+.footer-logo span{color:var(--lime);}
+.footer-text{font-size:.8rem;color:var(--muted);line-height:1.6;}
+.footer-links{display:flex;justify-content:center;gap:24px;margin:20px 0;flex-wrap:wrap;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .3s;}
+.footer-links a:hover{color:var(--lime);}
+.footer-socials{display:flex;justify-content:center;gap:12px;margin-top:24px;}
+.social-btn{width:40px;height:40px;background:rgba(255,255,255,.06);border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--cream);font-size:1rem;transition:all .3s;border:1px solid rgba(255,255,255,.08);}
+.social-btn:hover{background:var(--lime);color:var(--dark);border-color:var(--lime);}
 
-    .hero-tagline {
-      display: inline-block;
-      background: rgba(76,175,80,0.1);
-      color: var(--secondary-green-light);
-      font-size: 0.75rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      padding: 7px 20px;
-      border-radius: 30px;
-      margin-bottom: 25px;
-      border: 1px solid rgba(139, 195, 74, 0.3);
-      animation: tagPulse 3s infinite alternate;
-    }
-    @keyframes tagPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(139, 195, 74, 0.15); }
-      50% { box-shadow: 0 0 0 15px rgba(139, 195, 74, 0); }
-    }
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s;}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .7s,transform .7s;}
+.reveal-left.visible{opacity:1;transform:none;}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .7s,transform .7s;}
+.reveal-right.visible{opacity:1;transform:none;}
+.delay-1{transition-delay:.1s;}
+.delay-2{transition-delay:.2s;}
+.delay-3{transition-delay:.3s;}
+.delay-4{transition-delay:.4s;}
+.delay-5{transition-delay:.5s;}
 
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 12vw, 8rem);
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 20px;
-      text-shadow: 0 5px 20px var(--shadow-color);
-    }
-    .hero-title-main {
-      display: block;
-      background: linear-gradient(135deg, #ffffff, #f5f5f5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      padding-bottom: 8px;
-      opacity: 0;
-      transform: scale(1.1);
-      animation: heroTitleEnter 1.5s cubic-bezier(0.22,1,0.36,1) 3s forwards;
-    }
-    .hero-title-sub {
-      display: block;
-      background: linear-gradient(135deg, var(--secondary-green-light), var(--accent-gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0;
-      transform: scale(0.9);
-      animation: heroTitleEnter 1.5s cubic-bezier(0.22,1,0.36,1) 3.2s forwards;
-      background-size: 200% auto;
-      animation: shimmer 4s linear infinite alternate 3.2s;
-    }
-    @keyframes heroTitleEnter { to { opacity: 1; transform: scale(1); } }
-    @keyframes shimmer { 0% { background-position: 0%; } 100% { background-position: 100%; } }
+/* LANG HIDDEN */
+[data-lang]{display:none;}
+[data-lang].lang-active{display:block;}
+[data-lang-inline]{display:none;}
+[data-lang-inline].lang-active{display:inline;}
 
-    .hero-subtitle {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: var(--text-muted);
-      max-width: 700px;
-      margin: 25px auto 50px;
-      line-height: 1.7;
-      font-weight: 300;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeIn 1s ease-out 3.5s forwards;
-    }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
-    .hero-cta-buttons {
-      display: inline-flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .btn-primary, .btn-outline {
-      padding: 15px 40px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
-      box-shadow: 0 10px 30px var(--shadow-color);
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--secondary-green-light), var(--accent-gold));
-      color: var(--dark-bg);
-      border: none;
-    }
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--accent-gold), var(--secondary-green-light));
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .btn-primary:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(255, 193, 7, 0.4);
-      color: var(--text-light);
-    }
-    .btn-primary:hover::before { opacity: 1; }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--accent-gold);
-      border: 2px solid var(--accent-gold);
-      box-shadow: inset 0 0 0 0 var(--accent-gold);
-    }
-    .btn-outline:hover {
-      color: var(--dark-bg);
-      box-shadow: inset 0 -60px 0 0 var(--accent-gold);
-      transform: translateY(-5px) scale(1.02);
-    }
-    .btn-primary span, .btn-outline span { position: relative; z-index: 1; }
-
-    .hero-scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      animation: scrollBounce 2s ease-in-out infinite;
-      z-index: 2;
-      opacity: 0;
-      animation-delay: 3.5s;
-      animation-fill-mode: forwards;
-    }
-    .hero-scroll-indicator span {
-      font-size: 0.6rem;
-      letter-spacing: 3px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-    .scroll-line {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, var(--accent-gold), transparent);
-    }
-    @keyframes scrollBounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
-
-    /* ═══════════════════════════════════════
-       SECTION COMMON STYLES
-    ═══════════════════════════════════════ */
-    section {
-      position: relative;
-      z-index: 1;
-      padding: 80px 50px;
-      overflow: hidden; /* Prevents content spillover */
-    }
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1); }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-    .section-label {
-      display: inline-block;
-      font-size: 0.7rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--secondary-green-light);
-      margin-bottom: 16px;
-      position: relative;
-      padding: 0 30px;
-    }
-    .section-label::before, .section-label::after {
-      content: ''; position: absolute; top: 50%; transform: translateY(-50%);
-      width: 25px; height: 1px; background: linear-gradient(to right, var(--secondary-green-light), transparent);
-    }
-    .section-label::before { right: 0; }
-    .section-label::after { left: 0; transform: translateY(-50%) scaleX(-1); }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff, var(--text-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.2;
-    }
-    .section-line {
-      width: 50px; height: 2px; background: linear-gradient(90deg, var(--secondary-green-light), var(--accent-gold));
-      margin: 20px auto 0; border-radius: 2px;
-    }
-
-    /* ═══════════════════════════════════════
-       FEATURES SECTION
-    ═══════════════════════════════════════ */
-    #features { background: var(--dark-bg-alt); }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .feature-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 40px 32px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s, border-color 0.4s, background 0.4s;
-      cursor: default;
-      opacity: 0;
-      transform: translateY(40px) scale(0.98);
-      box-shadow: 0 15px 40px var(--shadow-color);
-    }
-    .feature-card.visible { opacity: 1; transform: translateY(0) scale(1); }
-    .feature-card::before { /* Hover overlay */
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(76,175,80,0.05), transparent);
-      opacity: 0; transition: opacity 0.4s; z-index: 1;
-    }
-    .feature-card:hover::before { opacity: 1; }
-    .feature-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 35px 70px rgba(0,0,0,0.5), 0 0 30px rgba(255,193,7,0.15);
-      border-color: rgba(255,193,7,0.35);
-      background: linear-gradient(135deg, rgba(48, 48, 48, 0.9), rgba(30, 30, 30, 0.95));
-    }
-    .feature-icon {
-      width: 60px; height: 60px; border-radius: 10px;
-      background: linear-gradient(135deg, rgba(76,175,80,0.15), rgba(76,175,80,0.05));
-      border: 1px solid var(--border-color);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; margin-bottom: 24px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .feature-card:hover .feature-icon {
-      transform: scale(1.15) rotate(-5deg);
-      box-shadow: 0 10px 30px rgba(255,193,7,0.4);
-    }
-    .feature-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      color: var(--text-light);
-      margin-bottom: 12px;
-    }
-    .feature-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-    }
-
-    /* ═══════════════════════════════════════
-       SERVICES SECTION
-    ═══════════════════════════════════════ */
-    #services { background: var(--dark-bg); }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 32px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .service-card {
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      aspect-ratio: 1 / 1;
-      cursor: pointer;
-      display: flex;
-      align-items: flex-end;
-      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
-      opacity: 0;
-      transform: scale(0.95) translateY(40px);
-      box-shadow: 0 15px 40px var(--shadow-color);
-    }
-    .service-card.visible { opacity: 1; transform: scale(1) translateY(0); }
-    .service-bg {
-      position: absolute; inset: 0;
-      background-size: cover; background-position: center;
-      transition: transform 0.6s ease-out;
-      filter: brightness(0.8) saturate(0.9);
-    }
-    .service-card:hover .service-bg { transform: scale(1.1); filter: brightness(1) saturate(1); }
-    .service-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(33, 33, 33, 0.9) 100%);
-      transition: background 0.4s;
-    }
-    .service-card:hover .service-overlay { background: linear-gradient(180deg, rgba(33, 33, 33, 0.3) 0%, rgba(33, 33, 33, 0.95) 100%); }
-    .service-content {
-      position: relative; z-index: 2;
-      padding: 30px; width: 100%;
-      text-align: center;
-    }
-    .service-tag {
-      font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--accent-gold);
-      margin-bottom: 10px;
-      display: inline-block;
-      background: rgba(255,193,7,0.1);
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-    }
-    .service-content h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
-      color: #fff;
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-    .service-content p.service-desc {
-      font-size: 0.85rem;
-      color: rgba(212,212,212,0.7);
-      line-height: 1.7;
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
-      opacity: 0;
-    }
-    .service-card:hover .service-desc { max-height: 100px; opacity: 1; }
-
-    /* ═══════════════════════════════════════
-       MENU / ASSORTMENT
-    ═══════════════════════════════════════ */
-    #menu { background: var(--dark-bg-alt); }
-    .menu-tabs {
-      display: flex; justify-content: center; gap: 10px; margin-bottom: 50px; flex-wrap: wrap;
-    }
-    .tab-btn {
-      background: transparent;
-      border: 1px solid rgba(255,193,7,0.2);
-      color: var(--text-muted);
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
-      font-family: 'Montserrat', sans-serif;
-    }
-    .tab-btn:hover, .tab-btn.active {
-      background: linear-gradient(135deg, var(--secondary-green-light), var(--accent-gold));
-      border-color: var(--accent-gold);
-      color: var(--dark-bg);
-      font-weight: 600;
-      box-shadow: 0 8px 25px rgba(255,193,7,0.3);
-    }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-      transition: opacity 0.3s ease;
-    }
-    .menu-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 30px 28px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
-      cursor: default;
-      box-shadow: 0 8px 20px var(--shadow-color);
-    }
-    .menu-item::before { /* Bottom accent line */
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px; background: linear-gradient(90deg, var(--secondary-green-light), var(--accent-gold));
-      transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
-    }
-    .menu-item:hover {
-      transform: translateY(-8px) scale(1.01);
-      border-color: rgba(255,193,7,0.3);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 20px rgba(255,193,7,0.1);
-      background: linear-gradient(135deg, rgba(48, 48, 48, 0.95), rgba(30, 30, 30, 0.98));
-    }
-    .menu-item:hover::before { transform: scaleX(1); }
-    .menu-emoji {
-      font-size: 2.8rem; display: block; margin-bottom: 16px; transition: transform 0.3s;
-    }
-    .menu-item:hover .menu-emoji { transform: scale(1.2) rotate(15deg); }
-    .menu-item h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      color: var(--text-light);
-      margin-bottom: 8px;
-    }
-    .menu-item p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-    .menu-price {
-      font-size: 1rem; font-weight: 600; color: var(--accent-gold);
-      letter-spacing: 1px;
-    }
-
-    /* ═══════════════════════════════════════
-       INFO STRIP / DETAILS
-    ═══════════════════════════════════════ */
-    #info-strip {
-      padding: 60px 50px;
-      background: var(--dark-bg);
-    }
-    .info-strip-inner {
-      max-width: 1100px; margin: 0 auto;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 50px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 40px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 50px var(--shadow-color);
-    }
-    .info-strip-inner::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-    }
-    .info-item { text-align: center; }
-    .info-item .icon {
-      font-size: 2.8rem; margin-bottom: 15px; display: block; color: var(--primary-green);
-    }
-    .info-item h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; color: var(--accent-gold);
-      margin-bottom: 8px; letter-spacing: 0.5px;
-    }
-    .info-item p {
-      font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;
-    }
-
-    /* ═══════════════════════════════════════
-       MAP SECTION
-    ═══════════════════════════════════════ */
-    #location { background: var(--dark-bg-alt); padding-top: 0; }
-    .map-container {
-      max-width: 1100px; margin: 0 auto;
-      border-radius: 16px; overflow: hidden;
-      border: 1px solid var(--border-color);
-      position: relative;
-      box-shadow: 0 -15px 40px var(--shadow-color);
-    }
-    .map-container iframe {
-      width: 100%; height: 450px; border: none; display: block;
-      filter: sepia(30%) saturate(70%) hue-rotate(10deg) brightness(0.7);
-      transition: filter 0.5s ease;
-    }
-    .map-container:hover iframe {
-      filter: sepia(0%) saturate(100%) hue-rotate(0deg) brightness(1);
-    }
-
-    /* ═══════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════ */
-    footer {
-      background: var(--footer-bg);
-      padding: 70px 50px 40px;
-      position: relative;
-      border-top: 1px solid var(--border-color);
-    }
-    .footer-inner { max-width: 1100px; margin: 0 auto; }
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 50px;
-      margin-bottom: 50px;
-    }
-    .footer-brand .nav-logo {
-      display: block; margin-bottom: 16px; font-size: 2.2rem;
-    }
-    .footer-brand p {
-      font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; max-width: 300px;
-    }
-    .footer-col h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; color: var(--accent-gold);
-      margin-bottom: 20px; letter-spacing: 0.5px;
-    }
-    .footer-col ul {
-      list-style: none; display: flex; flex-direction: column; gap: 12px;
-    }
-    .footer-col ul li a {
-      color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
-      transition: color 0.3s;
-    }
-    .footer-col ul li a:hover { color: var(--accent-gold); }
-    .footer-col ul li { font-size: 0.9rem; color: var(--text-muted); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,193,7,0.1);
-      padding-top: 30px;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 12px;
-    }
-    .footer-bottom-text p {
-      font-size: 0.8rem; color: rgba(212,212,212,0.35); letter-spacing: 1px;
-    }
-    .footer-bottom-text a {
-      color: rgba(212,212,212,0.4); transition: color 0.3s;
-    }
-    .footer-bottom-text a:hover { color: var(--accent-gold); }
-
-    .social-icons a {
-      color: var(--text-muted);
-      margin-left: 15px;
-      font-size: 1.1rem;
-      transition: color 0.3s;
-    }
-    .social-icons a:hover { color: var(--accent-gold); }
-
-    /* ═══════════════════════════════════════
-       RESPONSIVE DESIGN
-    ═══════════════════════════════════════ */
-    @media (max-width: 900px) {
-      nav { padding: 18px 30px; }
-      nav.scrolled { padding: 14px 30px; }
-      .nav-links { display: none; }
-      .burger { display: flex; }
-      section { padding: 60px 30px; }
-      .section-label::before, .section-label::after { width: 20px; }
-      .footer-top { grid-template-columns: 1fr; gap: 40px; }
-      footer { padding: 50px 30px 30px; }
-      .hero-title { font-size: clamp(2.5rem, 15vw, 7rem); }
-      .hero-subtitle { font-size: 1.1rem; }
-      .service-card { aspect-ratio: 1 / 1; }
-    }
-
-    @media (max-width: 600px) {
-      .hero-tagline { font-size: 0.65rem; padding: 6px 15px; }
-      .hero-title { font-size: clamp(2.8rem, 10vw, 5rem); }
-      .hero-cta-buttons { flex-direction: column; width: 100%; }
-      .btn-primary, .btn-outline { width: 100%; max-width: 300px; margin: 0 auto; }
-
-      .features-grid, .services-grid, .menu-grid { grid-template-columns: 1fr; }
-      .feature-card, .service-card, .menu-item { padding: 30px; }
-      .service-content h3 { font-size: 1.5rem; }
-
-      .map-container iframe { height: 350px; }
-
-      .footer-top { gap: 30px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
-      .footer-bottom-text p { font-size: 0.75rem; }
-      .social-icons { margin-top: 15px; }
-
-      .lang-switcher { gap: 5px; }
-      .lang-btn { padding: 4px 10px; font-size: 0.65rem; }
-    }
-
-    /* ═══════════════════════════════════════
-       LANGUAGE HANDLING
-    ═══════════════════════════════════════ */
-    [data-lang] { display: none; }
-    [data-lang].active-lang { display: block; }
-    .inline-lang { display: none; }
-    .inline-lang.active-lang { display: inline; }
-
-    /* ═══════════════════════════════════════
-       CURSOR GLOW EFFECT
-    ═══════════════════════════════════════ */
-    .cursor-glow {
-      position: fixed;
-      width: 250px; height: 250px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(76,175,80,0.1) 0%, rgba(255,193,7,0.05) 50%, transparent 75%);
-      pointer-events: none;
-      z-index: 999;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      filter: blur(30px);
-      transition: opacity 0.6s ease, transform 0.3s ease; /* Smoother position update */
-      will-change: opacity, transform;
-    }
-    .cursor-glow.visible { opacity: 1; }
-  </style>
+/* RESPONSIVE */
+@media(max-width:900px){
+  .about-wrap,.contact-wrap{grid-template-columns:1fr;gap:40px;}
+  .about-visual{max-width:400px;margin:0 auto;}
+  .hero-stats{display:none;}
+  .nav-links,.lang-switcher{display:none;}
+  .nav-burger{display:flex;}
+  .menu-grid{grid-template-columns:1fr 1fr;}
+  .map-overlay{display:none;}
+}
+@media(max-width:600px){
+  section{padding:70px 5%;}
+  .menu-grid{grid-template-columns:1fr;}
+  .adv-grid{grid-template-columns:1fr;}
+  .about-features{grid-template-columns:1fr;}
+  .menu-tabs{gap:6px;}
+  .menu-tab{padding:8px 16px;font-size:.72rem;}
+  footer .footer-links{gap:16px;}
+}
+</style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     LOADER
-═══════════════════════════════════════ -->
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LOADER -->
 <div id="loader">
-  <svg class="loader-logo" viewBox="0 0 100 100">
-    <path d="M50,20 L80,50 L50,80 L20,50 Z M50,30 L70,50 L50,70 L30,50 Z M50,40 L60,50 L50,60 L40,50 Z"/>
-  </svg>
-  <div class="loader-text-main">SANDOKAN</div>
-  <div class="loader-text-sub">VEGAN BISTRO</div>
-  <div class="loader-progress">
-    <div class="loader-progress-bar"></div>
-  </div>
+  <div class="loader-leaf">🌿</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-text">Sandokan Vegan Bistro</div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     MOBILE MENU
-═══════════════════════════════════════ -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#hero" onclick="closeMobile()" data-lang="cs" class="active-lang">Domů</a>
-  <a href="#hero" onclick="closeMobile()" data-lang="en">Home</a>
-  <a href="#hero" onclick="closeMobile()" data-lang="de">Start</a>
-  <a href="#hero" onclick="closeMobile()" data-lang="ru">Главная</a>
-
-  <a href="#features" onclick="closeMobile()" data-lang="cs" class="active-lang">Proč my</a>
-  <a href="#features" onclick="closeMobile()" data-lang="en">Why Us</a>
-  <a href="#features" onclick="closeMobile()" data-lang="de">Warum wir</a>
-  <a href="#features" onclick="closeMobile()" data-lang="ru">Почему мы</a>
-
-  <a href="#services" onclick="closeMobile()" data-lang="cs" class="active-lang">Služby</a>
-  <a href="#services" onclick="closeMobile()" data-lang="en">Services</a>
-  <a href="#services" onclick="closeMobile()" data-lang="de">Leistungen</a>
-  <a href="#services" onclick="closeMobile()" data-lang="ru">Услуги</a>
-
-  <a href="#menu" onclick="closeMobile()" data-lang="cs" class="active-lang">Menu</a>
-  <a href="#menu" onclick="closeMobile()" data-lang="en">Menu</a>
-  <a href="#menu" onclick="closeMobile()" data-lang="de">Menü</a>
-  <a href="#menu" onclick="closeMobile()" data-lang="ru">Меню</a>
-
-  <a href="#location" onclick="closeMobile()" data-lang="cs" class="active-lang">Kontakt</a>
-  <a href="#location" onclick="closeMobile()" data-lang="en">Contact</a>
-  <a href="#location" onclick="closeMobile()" data-lang="de">Kontakt</a>
-  <a href="#location" onclick="closeMobile()" data-lang="ru">Контакт</a>
-
-  <div class="lang-switcher" style="margin-top:20px;">
-    <button class="lang-btn active" onclick="setLang('cs');closeMobile()">CS</button>
-    <button class="lang-btn" onclick="setLang('en');closeMobile()">EN</button>
-    <button class="lang-btn" onclick="setLang('de');closeMobile()">DE</button>
-    <button class="lang-btn" onclick="setLang('ru');closeMobile()">RU</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     CUSTOM CURSOR
-═══════════════════════════════════════ -->
-<div class="cursor-glow" id="cursorGlow"></div>
-
-<!-- ═══════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════ -->
+<!-- NAV -->
 <nav id="navbar">
-  <a href="#hero" class="nav-logo">SANDOKAN</a>
+  <a href="#hero" class="nav-logo">Sand<span>o</span>kan</a>
   <ul class="nav-links">
-    <li><a href="#features"><span data-lang="cs" class="active-lang">Proč my</span><span data-lang="en">Why Us</span><span data-lang="de">Warum wir</span><span data-lang="ru">Почему мы</span></a></li>
-    <li><a href="#services"><span data-lang="cs" class="active-lang">Služby</span><span data-lang="en">Services</span><span data-lang="de">Leistungen</span><span data-lang="ru">Услуги</span></a></li>
-    <li><a href="#menu"><span data-lang="cs" class="active-lang">Menu</span><span data-lang="en">Menu</span><span data-lang="de">Menü</span><span data-lang="ru">Меню</span></a></li>
-    <li><a href="#location"><span data-lang="cs" class="active-lang">Kontakt</span><span data-lang="en">Contact</span><span data-lang="de">Kontakt</span><span data-lang="ru">Контакт</span></a></li>
+    <li><a href="#about" data-i18n="nav_about">O nás</a></li>
+    <li><a href="#advantages" data-i18n="nav_adv">Výhody</a></li>
+    <li><a href="#menu" data-i18n="nav_menu">Menu</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Kontakt</a></li>
   </ul>
-  <div style="display:flex;align-items:center;gap:20px;">
-    <div class="lang-switcher">
-      <button class="lang-btn active" onclick="setLang('cs')">CS</button>
-      <button class="lang-btn" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('de')">DE</button>
-      <button class="lang-btn" onclick="setLang('ru')">RU</button>
-    </div>
-    <div class="burger" id="burger" onclick="toggleMobile()"><span></span><span></span><span></span></div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('cs')">CS</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('ru')">RU</button>
+  </div>
+  <div class="nav-burger" id="burger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════
-     HERO SECTION
-═══════════════════════════════════════ -->
+<!-- MOBILE NAV -->
+<div class="nav-mobile" id="navMobile">
+  <a href="#about" onclick="toggleMobile()" data-i18n="nav_about">O nás</a>
+  <a href="#advantages" onclick="toggleMobile()" data-i18n="nav_adv">Výhody</a>
+  <a href="#menu" onclick="toggleMobile()" data-i18n="nav_menu">Menu</a>
+  <a href="#contact" onclick="toggleMobile()" data-i18n="nav_contact">Kontakt</a>
+  <div class="lang-switcher" style="margin-top:8px;">
+    <button class="lang-btn active" onclick="setLang('cs');toggleMobile()">CS</button>
+    <button class="lang-btn" onclick="setLang('en');toggleMobile()">EN</button>
+    <button class="lang-btn" onclick="setLang('de');toggleMobile()">DE</button>
+    <button class="lang-btn" onclick="setLang('ru');toggleMobile()">RU</button>
+  </div>
+</div>
+
+<!-- HERO -->
 <section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-particles" id="particles"></div>
   <div class="hero-content">
-    <div class="hero-tagline">
-      <span data-lang="cs" class="active-lang">🌱 Autentická Veganská Kuchyně · Praha</span>
-      <span data-lang="en">🌱 Authentic Vegan Cuisine · Prague</span>
-      <span data-lang="de">🌱 Authentische Vegane Küche · Prag</span>
-      <span data-lang="ru">🌱 Аутентичная веганская кухня · Прага</span>
-    </div>
+    <div class="hero-badge" data-i18n="hero_badge">Praha 3 · Vinohrady · Est. 2017</div>
     <h1 class="hero-title">
-      <span class="hero-title-main">SANDOKAN</span>
-      <span class="hero-title-sub">VEGAN BISTRO</span>
+      <span data-i18n="hero_title1">Čerstvé &</span><br>
+      <em data-i18n="hero_title2">Veganské</em><br>
+      <span data-i18n="hero_title3">Jídlo</span>
     </h1>
-    <p class="hero-subtitle">
-      <span data-lang="cs" class="active-lang">Objevte svět lahodných veganských pokrmů připravených z čerstvých surovin s láskou a vášní.</span>
-      <span data-lang="en">Discover a world of delicious vegan dishes prepared with fresh ingredients, love, and passion.</span>
-      <span data-lang="de">Entdecken Sie eine Welt voller köstlicher veganer Gerichte, zubereitet mit frischen Zutaten, Liebe und Leidenschaft.</span>
-      <span data-lang="ru">Откройте для себя мир восхитительных веганских блюд, приготовленных из свежих ингредиентов с любовью и страстью.</span>
-    </p>
-    <div class="hero-cta-buttons">
-      <a href="#menu" class="btn-primary"><span><span data-lang="cs" class="active-lang">Prohlédnout menu</span><span data-lang="en">View Menu</span><span data-lang="de">Menü ansehen</span><span data-lang="ru">Посмотреть меню</span></span></a>
-      <a href="#location" class="btn-outline"><span><span data-lang="cs" class="active-lang">Najděte nás</span><span data-lang="en">Find Us</span><span data-lang="de">Uns finden</span><span data-lang="ru">Найти нас</span></span></a>
+    <p class="hero-sub" data-i18n="hero_sub">Samoobslužný bufet s indickými příchutěmi. Každý den nové, 100% veganské a většinou bezlepkové pokrmy.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn btn-primary" data-i18n="hero_btn1">🌱 Prohlédnout menu</a>
+      <a href="#contact" class="btn btn-outline" data-i18n="hero_btn2">Jak nás najít</a>
     </div>
   </div>
-  <div class="hero-scroll-indicator">
-    <span>scroll</span>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4.7★</div><div class="stat-label" data-i18n="stat_rating">Hodnocení Google</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label" data-i18n="stat_vegan">Vegan</div></div>
+    <div class="stat"><div class="stat-num">2017</div><div class="stat-label" data-i18n="stat_since">Rok vzniku</div></div>
+  </div>
+  <div class="hero-scroll">
+    <span data-i18n="scroll_down">Scroll</span>
     <div class="scroll-line"></div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     FEATURES SECTION (Proč my)
-═══════════════════════════════════════ -->
-<section id="features">
-  <div class="section-header reveal">
-    <div class="section-label">
-      <span data-lang="cs" class="active-lang">Naše pilíře</span>
-      <span data-lang="en">Our Pillars</span>
-      <span data-lang="de">Unsere Säulen</span>
-      <span data-lang="ru">Наши столпы</span>
-    </div>
-    <h2 class="section-title">
-      <span data-lang="cs" class="active-lang">Proč si vybrat Sandokan</span>
-      <span data-lang="en">Why Choose Sandokan</span>
-      <span data-lang="de">Warum Sandokan wählen</span>
-      <span data-lang="ru">Почему выбирают Sandokan</span>
-    </h2>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🌿</div>
-      <h3>
-        <span data-lang="cs" class="active-lang">100% Vegan</span>
-        <span data-lang="en">100% Vegan</span>
-        <span data-lang="de">100% Vegan</span>
-        <span data-lang="ru">100% Веган</span>
-      </h3>
-      <p>
-        <span data-lang="cs" class="active-lang">Všechna naše jídla jsou bez živočišných produktů. Chuť, která potěší všechny.</span>
-        <span data-lang="en">All our dishes are free from animal products. Taste that delights everyone.</span>
-        <span data-lang="de">Alle unsere Gerichte sind frei von tierischen Produkten. Geschmack, der jeden begeistert.</span>
-        <span data-lang="ru">Все наши блюда без животных продуктов. Вкус, который порадует всех.</span>
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🥕</div>
-      <h3>
-        <span data-lang="cs" class="active-lang">Čerstvé Suroviny</span>
-        <span data-lang="en">Fresh Ingredients</span>
-        <span data-lang="de">Frische Zutaten</span>
-        <span data-lang="ru">Свежие ингредиенты</span>
-      </h3>
-      <p>
-        <span data-lang="cs" class="active-lang">Využíváme sezónní a lokální produkty pro maximální čerstvost a chuť.</span>
-        <span data-lang="en">We use seasonal and local products for maximum freshness and flavor.</span>
-        <span data-lang="de">Wir verwenden saisonale und lokale Produkte für maximale Frische und Geschmack.</span>
-        <span data-lang="ru">Используем сезонные и местные продукты для максимальной свежести и вкуса.</span>
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🍲</div>
-      <h3>
-        <span data-lang="cs" class="active-lang">Autentické Recepty</span>
-        <span data-lang="en">Authentic Recipes</span>
-        <span data-lang="de">Authentische Rezepte</span>
-        <span data-lang="ru">Аутентичные рецепты</span>
-      </h3>
-      <p>
-        <span data-lang="cs" class="active-lang">Inspirujeme se tradičními chutěmi a přinášíme je v moderní veganské podobě.</span>
-        <span data-lang="en">Inspired by traditional flavors, brought to you in a modern vegan form.</span>
-        <span data-lang="de">Inspiriert von traditionellen Aromen, in moderner veganer Form präsentiert.</span>
-        <span data-lang="ru">Вдохновлены традиционными вкусами и представлены в современной веганской форме.</span>
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">✨</div>
-      <h3>
-        <span data-lang="cs" class="active-lang">Útulná Atmosféra</span>
-        <span data-lang="en">Cozy Atmosphere</span>
-        <span data-lang="de">Gemütliche Atmosphäre</span>
-        <span data-lang="ru">Уютная атмосфера</span>
-      </h3>
-      <p>
-        <span data-lang="cs" class="active-lang">Prostor stvořený pro relaxaci a vychutnání si dobrého jídla v klidu.</span>
-        <span data-lang="en">A space created for relaxation and enjoying good food in peace.</span>
-        <span data-lang="de">Ein Raum geschaffen zum Entspannen und Genießen von gutem Essen in Ruhe.</span>
-        <span data-lang="ru">Пространство, созданное для отдыха и спокойного наслаждения вкусной едой.</span>
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">📍</div>
-      <h3>
-        <span data-lang="cs" class="active-lang">Centrum Prahy</span>
-        <span data-lang="en">Center of Prague</span>
-        <span data-lang="de">Zentrum von Prag</span>
-        <span data-lang="ru">Центр Праги</span>
-      </h3>
-      <p>
-        <span data-lang="cs" class="active-lang">Snadno dostupné místo blízko památek, ideální pro váš oběd či večeři.</span>
-        <span data-lang="en">Easily accessible location near landmarks, perfect for your lunch or dinner.</span>
-        <span data-lang="de">Leicht erreichbar in der Nähe von Sehenswürdigkeiten, perfekt für Ihr Mittag- oder Abendessen.</span>
-        <span data-lang="ru">Легкодоступное место рядом с достопримечательностями, идеально для вашего обеда или ужина.</span>
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">😊</div>
-      <h3>
-        <span data-lang="cs" class="active-lang">Přátelský Servis</span>
-        <span data-lang="en">Friendly Service</span>
-        <span data-lang="de">Freundlicher Service</span>
-        <span data-lang="ru">Дружелюбный сервис</span>
-      </h3>
-      <p>
-        <span data-lang="cs" class="active-lang">Náš tým je tu pro vás, abyste se cítili vítáni a spokojeni.</span>
-        <span data-lang="en">Our team is here for you, ensuring you feel welcome and satisfied.</span>
-        <span data-lang="de">Unser Team ist für Sie da, damit Sie sich willkommen und zufrieden fühlen.</span>
-        <span data-lang="ru">Наша команда здесь, чтобы вы чувствовали себя желанными и довольными.</span>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════
-     SERVICES SECTION
-═══════════════════════════════════════ -->
-<section id="services">
-  <div class="section-header reveal">
-    <div class="section-label">
-      <span data-lang="cs" class="active-lang">Co nabízíme</span>
-      <span data-lang="en">What We Offer</span>
-      <span data-lang="de">Was wir anbieten</span>
-      <span data-lang="ru">Что мы предлагаем</span>
-    </div>
-    <h2 class="section-title">
-      <span data-lang="cs" class="active-lang">Naše Služby</span>
-      <span data-lang="en">Our Services</span>
-      <span data-lang="de">Unsere Dienstleistungen</span>
-      <span data-lang="ru">Наши услуги</span>
-    </h2>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="services-grid">
-    <div class="service-card" id="service-dinein" style="background-image: url('https://images.unsplash.com/photo-1556075163-b37a433c7f1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');">
-      <div class="service-bg"></div>
-      <div class="service-overlay"></div>
-      <div class="service-content">
-        <div class="service-tag">DINE-IN</div>
-        <h3>
-          <span data-lang="cs" class="active-lang">Posezení</span>
-          <span data-lang="en">Dine-In</span>
-          <span data-lang="de">Speisen vor Ort</span>
-          <span data-lang="ru">Обед/ужин в бистро</span>
-        </h3>
-        <p class="service-desc">
-          <span data-lang="cs" class="active-lang">Vychutnejte si naše speciality v příjemném prostředí našeho bistra.</span>
-          <span data-lang="en">Enjoy our specialties in the pleasant ambiance of our bistro.</span>
-          <span data-lang="de">Genießen Sie unsere Spezialitäten in der angenehmen Atmosphäre unseres Bistros.</span>
-          <span data-lang="ru">Насладитесь нашими блюдами в приятной обстановке нашего бистро.</span>
-        </p>
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-wrap">
+    <div class="about-visual reveal-left">
+      <div class="about-img-frame">
+        <div class="about-img-inner">
+          <div class="about-plant">🌿</div>
+        </div>
+      </div>
+      <div class="about-badge-float">
+        <strong>39 Kč</strong>
+        <span data-i18n="badge_per100">za 100g</span>
       </div>
     </div>
-
-    <div class="service-card" id="service-takeaway" style="background-image: url('https://images.unsplash.com/photo-1595109735456-63199303ccd8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');">
-      <div class="service-bg"></div>
-      <div class="service-overlay"></div>
-      <div class="service-content">
-        <div class="service-tag">TAKEAWAY</div>
-        <h3>
-          <span data-lang="cs" class="active-lang">S sebou</span>
-          <span data-lang="en">Takeaway</span>
-          <span data-lang="de">Zum Mitnehmen</span>
-          <span data-lang="ru">Еда на вынос</span>
-        </h3>
-        <p class="service-desc">
-          <span data-lang="cs" class="active-lang">Vaše oblíbené veganské pokrmy si můžete odnést i domů či do kanceláře.</span>
-          <span data-lang="en">Take your favorite vegan dishes home or to the office.</span>
-          <span data-lang="de">Nehmen Sie Ihre Lieblings-Vegangerichte mit nach Hause oder ins Büro.</span>
-          <span data-lang="ru">Заберите ваши любимые веганские блюда домой или в офис.</span>
-        </p>
-      </div>
-    </div>
-
-    <div class="service-card" id="service-delivery" style="background-image: url('https://images.unsplash.com/photo-1611914573241-54840128863f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80');">
-       <div class="service-bg"></div>
-       <div class="service-overlay"></div>
-       <div class="service-content">
-         <div class="service-tag">DELIVERY</div>
-         <h3>
-           <span data-lang="cs" class="active-lang">Rozvoz</span>
-           <span data-lang="en">Delivery</span>
-           <span data-lang="de">Lieferung</span>
-           <span data-lang="ru">Доставка</span>
-         </h3>
-         <p class="service-desc">
-           <span data-lang="cs" class="active-lang">Objednejte si online a nechte si čerstvé veganské jídlo dovézt až ke dveřím.</span>
-           <span data-lang="en">Order online and have fresh vegan food delivered to your door.</span>
-           <span data-lang="de">Bestellen Sie online und lassen Sie sich frische vegane Gerichte nach Hause liefern.</span>
-           <span data-lang="ru">Закажите онлайн и получите свежую веганскую еду с доставкой до вашей двери.</span>
-         </p>
-       </div>
-    </div>
-
-    <div class="service-card" id="service-catering" style="background-image: url('https://images.unsplash.com/photo-1513149318397-34f94c8a1113?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80');">
-      <div class="service-bg"></div>
-      <div class="service-overlay"></div>
-      <div class="service-content">
-        <div class="service-tag">CATERING</div>
-        <h3>
-          <span data-lang="cs" class="active-lang">Catering</span>
-          <span data-lang="en">Catering</span>
-          <span data-lang="de">Catering</span>
-          <span data-lang="ru">Кейтеринг</span>
-        </h3>
-        <p class="service-desc">
-          <span data-lang="cs" class="active-lang">Přizpůsobíme veganské menu pro vaše soukromé či firemní akce.</span>
-          <span data-lang="en">We tailor vegan menus for your private or corporate events.</span>
-          <span data-lang="de">Wir passen vegane Menüs für Ihre privaten oder geschäftlichen Veranstaltungen an.</span>
-          <span data-lang="ru">Мы адаптируем веганское меню для ваших частных или корпоративных мероприятий.</span>
-        </p>
+    <div class="about-text reveal-right">
+      <span class="section-tag" data-i18n="about_tag">O nás</span>
+      <h2 class="section-title" data-i18n="about_title">Indické příchutě<br>v srdci <em>Vinohrad</em></h2>
+      <p class="section-desc" data-i18n="about_desc1">Sandokan vegan bistro od roku 2017 připravuje vysoce kvalitní a čerstvé pokrmy s indickými příchutěmi. Denní menu nabízí veganské i bezlepkové varianty — vše je připraveno ráno, takže při otevření je vše super čerstvé.</p>
+      <p class="section-desc" data-i18n="about_desc2">Náš samoobslužný bufet se každý den mění — salátový bar, teplá jídla, polévky. Platíte podle váhy nebo si objednáte jídla s pevnou cenou jako tacos, bowl či souvlaki.</p>
+      <div class="about-features">
+        <div class="feature-chip reveal delay-1"><span class="icon">🥗</span><span data-i18n="feat1">Denní bufet</span></div>
+        <div class="feature-chip reveal delay-2"><span class="icon">🌾</span><span data-i18n="feat2">Bez lepku</span></div>
+        <div class="feature-chip reveal delay-3"><span class="icon">🍃</span><span data-i18n="feat3">100% Vegan</span></div>
+        <div class="feature-chip reveal delay-4"><span class="icon">🌶️</span><span data-i18n="feat4">Indická fúze</span></div>
+        <div class="feature-chip reveal delay-5"><span class="icon">🍺</span><span data-i18n="feat5">Pivo Obora</span></div>
+        <div class="feature-chip reveal delay-1"><span class="icon">🚲</span><span data-i18n="feat6">Rozvoz</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     MENU / ASSORTMENT
-═══════════════════════════════════════ -->
+<!-- ADVANTAGES -->
+<section id="advantages">
+  <div style="max-width:1200px;margin:0 auto;text-align:center;" class="reveal">
+    <span class="section-tag" data-i18n="adv_tag">Proč Sandokan</span>
+    <h2 class="section-title" data-i18n="adv_title">Proč si nás <em>zamilujete</em></h2>
+  </div>
+  <div class="adv-grid">
+    <div class="adv-card reveal delay-1">
+      <span class="adv-icon">🌱</span>
+      <div class="adv-title" data-i18n="adv1_title">100% rostlinné</div>
+      <p class="adv-text" data-i18n="adv1_text">Vše bez masa, bez mléka, bez vajec. Spoléháme na kvalitní suroviny a autentické koření — žádné kompromisy.</p>
+    </div>
+    <div class="adv-card reveal delay-2">
+      <span class="adv-icon">⚡</span>
+      <div class="adv-title" data-i18n="adv2_title">Vždy čerstvé</div>
+      <p class="adv-text" data-i18n="adv2_text">Vše se vaří ráno před otevřením. Při příchodu v 11:15 je bufet naplněn tím nejčerstvějším jídlem dne.</p>
+    </div>
+    <div class="adv-card reveal delay-3">
+      <span class="adv-icon">🎯</span>
+      <div class="adv-title" data-i18n="adv3_title">Platíte za gramáž</div>
+      <p class="adv-text" data-i18n="adv3_text">Samoobslužný bufet — sami si naložíte kolik chcete a platíte 39 Kč za 100 g. Nebo si objednáte jídla s pevnou cenou.</p>
+    </div>
+    <div class="adv-card reveal delay-4">
+      <span class="adv-icon">🌍</span>
+      <div class="adv-title" data-i18n="adv4_title">Indická fúze</div>
+      <p class="adv-text" data-i18n="adv4_text">Curry, guláš, souvlaki, tacos, salátové misy — každý den jiná nabídka. Inspirace z celého světa, srdce v Indii.</p>
+    </div>
+    <div class="adv-card reveal delay-5">
+      <span class="adv-icon">💚</span>
+      <div class="adv-title" data-i18n="adv5_title">Bez cukru & lepku</div>
+      <p class="adv-text" data-i18n="adv5_text">Naprostá většina pokrmů je bez cukru a bez lepku. Ideální volba pro celiaky a ty, kdo pečují o své zdraví.</p>
+    </div>
+    <div class="adv-card reveal delay-1">
+      <span class="adv-icon">🏡</span>
+      <div class="adv-title" data-i18n="adv6_title">Útulná atmosféra</div>
+      <p class="adv-text" data-i18n="adv6_text">Posezení uvnitř i v zahradě. Přátelský personál, příjemná hudba a pocit domova — místní to sem chodí opakovaně.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
 <section id="menu">
-  <div class="section-header reveal">
-    <div class="section-label">
-      <span data-lang="cs" class="active-lang">Ochutnejte naše</span>
-      <span data-lang="en">Taste our</span>
-      <span data-lang="de">Probieren Sie unser</span>
-      <span data-lang="ru">Попробуйте наши</span>
-    </div>
-    <h2 class="section-title">
-      <span data-lang="cs" class="active-lang">Veganské Menu</span>
-      <span data-lang="en">Vegan Menu</span>
-      <span data-lang="de">Veganes Menü</span>
-      <span data-lang="ru">Веганское меню</span>
-    </h2>
-    <div class="section-line"></div>
+  <div style="max-width:1200px;margin:0 auto;" class="reveal">
+    <span class="section-tag" data-i18n="menu_tag">Jídelní lístek</span>
+    <h2 class="section-title" data-i18n="menu_title">Naše <em>speciality</em></h2>
+    <p class="section-desc" data-i18n="menu_desc">Bufet se každý den mění — níže jsou naše oblíbené stálice a typické kategorie.</p>
   </div>
-
   <div class="menu-tabs">
-    <button class="tab-btn active" onclick="filterMenu('all')">
-      <span data-lang="cs" class="active-lang">Vše</span><span data-lang="en">All</span><span data-lang="de">Alle</span><span data-lang="ru">Всё</span>
-    </button>
-    <button class="tab-btn" onclick="filterMenu('appetizers')">
-      <span data-lang="cs" class="active-lang">Předkrmy</span><span data-lang="en">Appetizers</span><span data-lang="de">Vorspeisen</span><span data-lang="ru">Закуски</span>
-    </button>
-    <button class="tab-btn" onclick="filterMenu('main')">
-      <span data-lang="cs" class="active-lang">Hlavní jídla</span><span data-lang="en">Main Courses</span><span data-lang="de">Hauptgerichte</span><span data-lang="ru">Основные блюда</span>
-    </button>
-    <button class="tab-btn" onclick="filterMenu('desserts')">
-      <span data-lang="cs" class="active-lang">Dezerty</span><span data-lang="en">Desserts</span><span data-lang="de">Desserts</span><span data-lang="ru">Десерты</span>
-    </button>
-    <button class="tab-btn" onclick="filterMenu('drinks')">
-      <span data-lang="cs" class="active-lang">Nápoje</span><span data-lang="en">Drinks</span><span data-lang="de">Getränke</span><span data-lang="ru">Напитки</span>
-    </button>
+    <button class="menu-tab active" onclick="filterMenu('all')" data-i18n="tab_all">Vše</button>
+    <button class="menu-tab" onclick="filterMenu('hot')" data-i18n="tab_hot">Teplá jídla</button>
+    <button class="menu-tab" onclick="filterMenu('salad')" data-i18n="tab_salad">Saláty</button>
+    <button class="menu-tab" onclick="filterMenu('bowl')" data-i18n="tab_bowl">Bowls</button>
+    <button class="menu-tab" onclick="filterMenu('drinks')" data-i18n="tab_drinks">Nápoje</button>
   </div>
-
   <div class="menu-grid" id="menuGrid">
-
-    <!-- Appetizers -->
-    <div class="menu-item" data-cat="appetizers">
-      <span class="menu-emoji">🥑</span>
-      <h4><span data-lang="cs" class="active-lang">Guacamole s Nachos</span><span data-lang="en">Guacamole with Nachos</span><span data-lang="de">Guacamole mit Nachos</span><span data-lang="ru">Гуакамоле с Начос</span></h4>
-      <p><span data-lang="cs" class="active-lang">Domácí guacamole z čerstvého avokáda podávané s křupavými nachos.</span><span data-lang="en">Homemade guacamole from fresh avocado served with crispy nachos.</span><span data-lang="de">Hausgemachte Guacamole aus frischer Avocado, serviert mit knusprigen Nachos.</span><span data-lang="ru">Домашнее гуакамоле из свежего авокадо, подается с хрустящими начос.</span></p>
-      <div class="menu-price">140 Kč</div>
-    </div>
-    <div class="menu-item" data-cat="appetizers">
-      <span class="menu-emoji">🌶️</span>
-      <h4><span data-lang="cs" class="active-lang">Jalapeño Poppers</span><span data-lang="en">Jalapeño Poppers</span><span data-lang="de">Jalapeño Poppers</span><span data-lang="ru">Халапеньо Попперс</span></h4>
-      <p><span data-lang="cs" class="active-lang">Pálivé papričky jalapeño plněné veganským krémovým sýrem.</span><span data-lang="en">Spicy jalapeño peppers stuffed with vegan cream cheese.</span><span data-lang="de">Scharfe Jalapeño-Paprika, gefüllt mit veganem Frischkäse.</span><span data-lang="ru">Острые перцы халапеньо, фаршированные веганским сливочным сыром.</span></p>
-      <div class="menu-price">120 Kč</div>
-    </div>
-
-    <!-- Main Courses -->
-    <div class="menu-item" data-cat="main">
-      <span class="menu-emoji">🍔</span>
-      <h4><span data-lang="cs" class="active-lang">Sandokan Burger</span><span data-lang="en">Sandokan Burger</span><span data-lang="de">Sandokan Burger</span><span data-lang="ru">Бургер Sandokan</span></h4>
-      <p><span data-lang="cs" class="active-lang">Náš signature burger s rostlinným plátkem, čerstvou zeleninou a domácí omáčkou.</span><span data-lang="en">Our signature burger with a plant-based patty, fresh vegetables, and homemade sauce.</span><span data-lang="de">Unser Signature-Burger mit pflanzlichem Patty, frischem Gemüse und hausgemachter Sauce.</span><span data-lang="ru">Наш фирменный бургер с растительной котлетой, свежими овощами и домашним соусом.</span></p>
-      <div class="menu-price">250 Kč</div>
-    </div>
-    <div class="menu-item" data-cat="main">
-      <span class="menu-emoji">🍜</span>
-      <h4><span data-lang="cs" class="active-lang">Smažené Nudle</span><span data-lang="en">Stir-Fried Noodles</span><span data-lang="de">Gebratene Nudeln</span><span data-lang="ru">Жареная лапша</span></h4>
-      <p><span data-lang="cs" class="active-lang">Asijské nudle s tofu, zeleninou a pikantní omáčkou.</span><span data-lang="en">Asian noodles with tofu, vegetables, and a spicy sauce.</span><span data-lang="de">Asiatische Nudeln mit Tofu, Gemüse und scharfer Sauce.</span><span data-lang="ru">Азиатская лапша с тофу, овощами и пикантным соусом.</span></p>
-      <div class="menu-price">230 Kč</div>
-    </div>
-    <div class="menu-item" data-cat="main">
-      <span class="menu-emoji">curry</span>
-      <h4><span data-lang="cs" class="active-lang">Kokosové Kari</span><span data-lang="en">Coconut Curry</span><span data-lang="de">Kokos-Curry</span><span data-lang="ru">Кокосовое Карри</span></h4>
-      <p><span data-lang="cs" class="active-lang">Bohaté kari s kokosovým mlékem, zeleninou a rýží basmati.</span><span data-lang="en">Rich curry with coconut milk, vegetables, and basmati rice.</span><span data-lang="de">Reichhaltiges Curry mit Kokosmilch, Gemüse und Basmatireis.</span><span data-lang="ru">Насыщенное карри с кокосовым молоком, овощами и рисом басмати.</span></p>
-      <div class="menu-price">240 Kč</div>
-    </div>
-
-    <!-- Desserts -->
-    <div class="menu-item" data-cat="desserts">
-      <span class="menu-emoji">🍰</span>
-      <h4><span data-lang="cs" class="active-lang">Čokoládový Mousse</span><span data-lang="en">Chocolate Mousse</span><span data-lang="de">Schokoladenmousse</span><span data-lang="ru">Шоколадный Мусс</span></h4>
-      <p><span data-lang="cs" class="active-lang">Nadýchaný a intenzivní čokoládový dezert.</span><span data-lang="en">Fluffy and intense chocolate dessert.</span><span data-lang="de">Luftiges und intensives Schokoladendessert.</span><span data-lang="ru">Воздушный и насыщенный шоколадный десерт.</span></p>
-      <div class="menu-price">110 Kč</div>
-    </div>
-    <div class="menu-item" data-cat="desserts">
-      <span class="menu-emoji">🍓</span>
-      <h4><span data-lang="cs" class="active-lang">Ovocný Koláč</span><span data-lang="en">Fruit Tart</span><span data-lang="de">Obstkuchen</span><span data-lang="ru">Фруктовый пирог</span></h4>
-      <p><span data-lang="cs" class="active-lang">Lehký koláč s čerstvým sezónním ovocem.</span><span data-lang="en">Light tart with fresh seasonal fruit.</span><span data-lang="de">Leichter Kuchen mit frischem saisonalem Obst.</span><span data-lang="ru">Легкий пирог со свежими сезонными фруктами.</span></p>
-      <div class="menu-price">95 Kč</div>
-    </div>
-
-    <!-- Drinks -->
-    <div class="menu-item" data-cat="drinks">
-      <span class="menu-emoji">🍹</span>
-      <h4><span data-lang="cs" class="active-lang">Čerstvé Limonády</span><span data-lang="en">Fresh Lemonades</span><span data-lang="de">Frische Limonaden</span><span data-lang="ru">Свежие Лимонады</span></h4>
-      <p><span data-lang="cs" class="active-lang">Domácí limonády z výběrového ovoce a bylinek.</span><span data-lang="en">Homemade lemonades from selected fruits and herbs.</span><span data-lang="de">Hausgemachte Limonaden aus ausgewählten Früchten und Kräutern.</span><span data-lang="ru">Домашние лимонады из отборных фруктов и трав.</span></p>
-      <div class="menu-price">85 Kč</div>
-    </div>
-    <div class="menu-item" data-cat="drinks">
-      <span class="menu-emoji"> kombucha</span>
-       <h4><span data-lang="cs" class="active-lang">Kombucha</span><span data-lang="en">Kombucha</span><span data-lang="de">Kombucha</span><span data-lang="ru">Комбуча</span></h4>
-      <p><span data-lang="cs" class="active-lang">Fermentovaný čajový nápoj, zdravý a osvěžující.</span><span data-lang="en">Fermented tea drink, healthy and refreshing.</span><span data-lang="de">Fermentiertes Teegetränk, gesund und erfrischend.</span><span data-lang="ru">Ферментированный чайный напиток, здоровый и освежающий.</span></p>
-      <div class="menu-price">90 Kč</div>
-    </div>
-    <div class="menu-item" data-cat="drinks">
-      <span class="menu-emoji">☕</span>
-      <h4><span data-lang="cs" class="active-lang">Bio Káva</span><span data-lang="en">Organic Coffee</span><span data-lang="de">Bio-Kaffee</span><span data-lang="ru">Био Кофе</span></h4>
-      <p><span data-lang="cs" class="active-lang">Vynikající bio káva z lokální pražírny.</span><span data-lang="en">Excellent organic coffee from a local roastery.</span><span data-lang="de">Ausgezeichneter Bio-Kaffee von einer lokalen Rösterei.</span><span data-lang="ru">Отличный био кофе от местной обжарщика.</span></p>
-      <div class="menu-price">65 Kč</div>
-    </div>
-
+    <!-- Cards injected by JS -->
   </div>
+  <p class="menu-note reveal" data-i18n="menu_note">Denní nabídka bufetu se mění — sledujte nás na Facebooku pro aktuální menu. Vše je 100% vegan. Bezlepkové položky označeny GF.</p>
 </section>
 
-<!-- ═══════════════════════════════════════
-     INFO STRIP / OPERATING HOURS
-═══════════════════════════════════════ -->
-<section id="info-strip" style="padding-top:0;">
-  <div class="info-strip-inner reveal">
-    <div class="info-item">
-      <span class="icon">⏰</span>
-      <h4><span data-lang="cs" class="active-lang">Otevírací Doba</span><span data-lang="en">Opening Hours</span><span data-lang="de">Öffnungszeiten</span><span data-lang="ru">Часы работы</span></h4>
-      <p>
-        <span data-lang="cs" class="active-lang">Pondělí–Pátek: 11:00 – 22:00<br>Sobota–Neděle: 12:00 – 23:00</span>
-        <span data-lang="en">Monday–Friday: 11:00 – 22:00<br>Saturday–Sunday: 12:00 – 23:00</span>
-        <span data-lang="de">Montag–Freitag: 11:00 – 22:00<br>Samstag–Sonntag: 12:00 – 23:00</span>
-        <span data-lang="ru">Понедельник–Пятница: 11:00 – 22:00<br>Суббота–Воскресенье: 12:00 – 23:00</span>
-      </p>
+<!-- CONTACT -->
+<section id="contact">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="reveal" style="margin-bottom:48px;">
+      <span class="section-tag" data-i18n="contact_tag">Kontakt</span>
+      <h2 class="section-title" data-i18n="contact_title">Navštivte <em>nás</em></h2>
     </div>
-    <div class="info-item">
-      <span class="icon">📞</span>
-      <h4><span data-lang="cs" class="active-lang">Rezervace Stolu</span><span data-lang="en">Table Reservations</span><span data-lang="de">Tischreservierung</span><span data-lang="ru">Бронирование стола</span></h4>
-      <p>
-        <span data-lang="cs" class="active-lang">Pro skupiny nad 4 osoby doporučujeme rezervaci.<br>+420 123 456 789</span>
-        <span data-lang="en">For groups larger than 4 people, we recommend booking.<br>+420 123 456 789</span>
-        <span data-lang="de">Für Gruppen ab 4 Personen empfehlen wir eine Reservierung.<br>+420 123 456 789</span>
-        <span data-lang="ru">Для групп более 4 человек рекомендуем бронирование.<br>+420 123 456 789</span>
-      </p>
-    </div>
-    <div class="info-item">
-      <span class="icon">⭐</span>
-      <h4><span data-lang="cs" class="active-lang">Hodnocení Hostů</span><span data-lang="en">Guest Ratings</span><span data-lang="de">Gästebewertungen</span><span data-lang="ru">Отзывы гостей</span></h4>
-      <p>
-        <span data-lang="cs" class="active-lang">4.7⭐ Google Maps<br>Oblíbené místo pro autentickou veganskou kuchyni.</span>
-        <span data-lang="en">4.7⭐ Google Maps<br>A favorite spot for authentic vegan cuisine.</span>
-        <span data-lang="de">4.7⭐ Google Maps<br>Ein beliebter Ort für authentische vegane Küche.</span>
-        <span data-lang="ru">4.7⭐ Google Maps<br>Любимое место для аутентичной веганской кухни.</span>
-      </p>
+    <div class="contact-wrap">
+      <div class="hours-card reveal-left">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:24px;" data-i18n="hours_title">Otevírací doba</h3>
+        <div class="hours-row">
+          <span class="hours-day" data-i18n="mon_thu">Pondělí – Čtvrtek</span>
+          <span class="hours-time">11:00 – 17:00</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day" data-i18n="fri">Pátek</span>
+          <span class="hours-time">11:00 – 16:00</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day" data-i18n="sat_sun">Sobota – Neděle</span>
+          <span class="hours-time closed" data-i18n="closed">Zavřeno</span>
+        </div>
+        <div style="margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);">
+          <p style="font-size:.82rem;color:rgba(245,240,232,.4);line-height:1.6;" data-i18n="delivery_text">Rozvoz přes <strong style="color:var(--lime);">Wolt</strong> a <strong style="color:var(--lime);">Bolt Food</strong> — objednejte online!</p>
+        </div>
+      </div>
+      <div class="contact-info reveal-right">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-item-text">
+            <strong data-i18n="addr_label">Adresa</strong>
+            <span>Korunní 1172/81<br>130 00 Praha 3 – Vinohrady</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-item-text">
+            <strong data-i18n="phone_label">Telefon</strong>
+            <a href="tel:+420222931010">+420 222 931 010</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🌐</div>
+          <div class="contact-item-text">
+            <strong data-i18n="web_label">Web</strong>
+            <a href="https://sandokanprague.cz" target="_blank">sandokanprague.cz</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📘</div>
+          <div class="contact-item-text">
+            <strong>Facebook</strong>
+            <a href="https://www.facebook.com/sandokanbistro/" target="_blank">@sandokanbistro</a>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <a href="https://www.google.com/maps/place/Sandokan+Vegan+Bistro/@50.0755111,14.4514353,17z" target="_blank" class="btn btn-primary" style="display:inline-flex;" data-i18n="directions_btn">🗺️ Trasa v Google Maps</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     MAP SECTION
-═══════════════════════════════════════ -->
-<section id="location">
-  <div class="section-header reveal">
-    <div class="section-label">
-      <span data-lang="cs" class="active-lang">Těšíme se na vaši návštěvu</span>
-      <span data-lang="en">We look forward to your visit</span>
-      <span data-lang="de">Wir freuen uns auf Ihren Besuch</span>
-      <span data-lang="ru">Ждем вас в гости</span>
-    </div>
-    <h2 class="section-title">
-      <span data-lang="cs" class="active-lang">Kde Nás Najdete</span>
-      <span data-lang="en">Where To Find Us</span>
-      <span data-lang="de">Wo Sie Uns Finden</span>
-      <span data-lang="ru">Где нас найти</span>
-    </h2>
-    <div class="section-line"></div>
+<!-- MAP -->
+<div id="map-section">
+  <div class="map-header reveal">
+    <span class="section-tag" data-i18n="map_tag">Kde nás najdete</span>
+    <h2 class="section-title" data-i18n="map_title">Praha 3 – <em>Vinohrady</em></h2>
   </div>
-
-  <div class="map-container reveal">
+  <div class="map-container">
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2559.373470095081!2d14.451435300000001!3d50.075511100000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9482ecbc7003%3A0xe476d4fb735c8a4b!2sSandokan%20Vegan%20Bistro!5e0!3m2!1sen!2scz!4v1"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2560.2!2d14.449!3d50.0755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b9482ecbc7003%3A0xe476d4fb735c8a4b!2sSandokan%20Vegan%20Bistro!5e0!3m2!1scs!2scz!4v1"
       allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-      title="Sandokan Vegan Bistro location">
-    </iframe>
+      title="Sandokan Vegan Bistro mapa"></iframe>
+    <div class="map-overlay">
+      <strong>Sandokan Vegan Bistro</strong>
+      <span>Korunní 1172/81<br>Praha 3 – Vinohrady</span>
+      <a href="https://www.google.com/maps/place/Sandokan+Vegan+Bistro/@50.0755111,14.4514353,17z" target="_blank">Otevřít v Maps →</a>
+    </div>
   </div>
-</section>
+</div>
 
-<!-- ═══════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="#hero" class="nav-logo">SANDOKAN</a>
-        <p>
-          <span data-lang="cs" class="active-lang">Vaše oáza veganské chuti v srdci Prahy.</span>
-          <span data-lang="en">Your oasis of vegan flavor in the heart of Prague.</span>
-          <span data-lang="de">Ihre Oase veganen Geschmacks im Herzen Prags.</span>
-          <span data-lang="ru">Ваш оазис веганского вкуса в сердце Праги.</span>
-        </p>
-      </div>
-      <div class="footer-col">
-        <h4><span data-lang="cs" class="active-lang">Navigace</span><span data-lang="en">Navigation</span><span data-lang="de">Navigation</span><span data-lang="ru">Навигация</span></h4>
-        <ul>
-          <li><a href="#features"><span data-lang="cs" class="active-lang">Proč my</span><span data-lang="en">Why Us</span><span data-lang="de">Warum wir</span><span data-lang="ru">Почему мы</span></a></li>
-          <li><a href="#services"><span data-lang="cs" class="active-lang">Služby</span><span data-lang="en">Services</span><span data-lang="de">Leistungen</span><span data-lang="ru">Услуги</span></a></li>
-          <li><a href="#menu"><span data-lang="cs" class="active-lang">Menu</span><span data-lang="en">Menu</span><span data-lang="de">Menü</span><span data-lang="ru">Меню</span></a></li>
-          <li><a href="#location"><span data-lang="cs" class="active-lang">Kontakt</span><span data-lang="en">Contact</span><span data-lang="de">Kontakt</span><span data-lang="ru">Контакт</span></a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4><span data-lang="cs" class="active-lang">Kontakt & Info</span><span data-lang="en">Contact & Info</span><span data-lang="de">Kontakt & Info</span><span data-lang="ru">Контакты & Инфо</span></h4>
-        <ul>
-          <li>Nám. J. Palacha 1/2</li>
-          <li>110 00 Staré Město, Praha 1</li>
-          <li>Po-Pá: 11:00–22:00, So-Ne: 12:00–23:00</li>
-          <li><a href="tel:+420123456789">+420 123 456 789</a></li>
-          <li><a href="mailto:info@sandokanvegan.cz">info@sandokanvegan.cz</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-bottom-text">
-        <p>© 2024 Sandokan Vegan Bistro.<span data-lang="cs" class="active-lang inline-lang"> Všechna práva vyhrazena.</span><span data-lang="en" class="inline-lang"> All rights reserved.</span><span data-lang="de" class="inline-lang"> Alle Rechte vorbehalten.</span><span data-lang="ru" class="inline-lang"> Все права защищены.</span> | Vařeno s láskou a rostlinami.</p>
-      </div>
-      <div class="social-icons">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Tripadvisor"><i class="fab fa-tripadvisor"></i></a>
-      </div>
-    </div>
+  <div class="footer-logo">Sand<span>o</span>kan <span style="font-weight:300;font-size:1rem;color:var(--muted);">Vegan Bistro</span></div>
+  <p class="footer-text" data-i18n="footer_tagline">Praha 3 · Vinohrady · 100% Vegan · Est. 2017</p>
+  <div class="footer-links">
+    <a href="#about" data-i18n="nav_about">O nás</a>
+    <a href="#advantages" data-i18n="nav_adv">Výhody</a>
+    <a href="#menu" data-i18n="nav_menu">Menu</a>
+    <a href="#contact" data-i18n="nav_contact">Kontakt</a>
   </div>
+  <div class="footer-socials">
+    <a href="https://www.facebook.com/sandokanbistro/" class="social-btn" target="_blank" title="Facebook">f</a>
+    <a href="https://wolt.com/en/cze/prague/restaurant/sandokan-vegan-bistro" class="social-btn" target="_blank" title="Wolt">W</a>
+    <a href="https://food.bolt.eu/cs-cz/271-prague/p/109239-sandokan-vegan-bistro/" class="social-btn" target="_blank" title="Bolt Food">B</a>
+  </div>
+  <p style="font-size:.72rem;color:rgba(107,107,80,.4);margin-top:24px;" data-i18n="footer_copy">© 2025 Sandokan Vegan Bistro. Všechna práva vyhrazena.</p>
 </footer>
 
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-<!-- ═══════════════════════════════════════
-     SCRIPTS
-═══════════════════════════════════════ -->
 <script>
-/* ─── LOADER ANIMATION MANAGEMENT ─── */
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const loader = document.getElementById('loader');
-    loader.style.opacity = '0';
-    loader.addEventListener('transitionend', () => {
-      loader.style.display = 'none';
-      document.body.style.overflowY = ''; // Restore scroll
-      document.body.classList.add('loaded'); // Show body content
-    });
-  }, 3200); // Keep loader visible for the full animation duration
-});
-document.body.style.overflowY = 'hidden'; // Prevent scrolling during load
-
-/* ─── BACKGROUND PARTICLES ─── */
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let W, H;
-let animationFrameId;
-
-function resizeCanvas() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-function initParticles() {
-  particles = [];
-  // Adjust particle count based on screen size, keep it relatively sparse
-  const particleCount = Math.floor(W * H / (15000 + W*H/5000));
-  for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.5, // Size of particles
-      vx: (Math.random() - 0.5) * 0.3, // Slower horizontal movement
-      vy: (Math.random() - 0.5) * 0.3, // Slower vertical movement
-      a: Math.random() * 0.3 + 0.1 // Alpha transparency
-    });
+// ---- TRANSLATIONS ----
+const T = {
+  cs: {
+    nav_about:"O nás", nav_adv:"Výhody", nav_menu:"Menu", nav_contact:"Kontakt",
+    hero_badge:"Praha 3 · Vinohrady · Est. 2017",
+    hero_title1:"Čerstvé &", hero_title2:"Veganské", hero_title3:"Jídlo",
+    hero_sub:"Samoobslužný bufet s indickými příchutěmi. Každý den nové, 100% veganské a většinou bezlepkové pokrmy.",
+    hero_btn1:"🌱 Prohlédnout menu", hero_btn2:"Jak nás najít",
+    stat_rating:"Hodnocení Google", stat_vegan:"Vegan", stat_since:"Rok vzniku",
+    scroll_down:"Scroll",
+    about_tag:"O nás", about_title:"Indické příchutě\nv srdci", about_title_em:"Vinohrad",
+    about_desc1:"Sandokan vegan bistro od roku 2017 připravuje vysoce kvalitní a čerstvé pokrmy s indickými příchutěmi. Denní menu nabízí veganské i bezlepkové varianty — vše je připraveno ráno, takže při otevření je vše super čerstvé.",
+    about_desc2:"Náš samoobslužný bufet se každý den mění — salátový bar, teplá jídla, polévky. Platíte podle váhy nebo si objednáte jídla s pevnou cenou jako tacos, bowl či souvlaki.",
+    badge_per100:"za 100g",
+    feat1:"Denní bufet", feat2:"Bez lepku", feat3:"100% Vegan", feat4:"Indická fúze", feat5:"Pivo Obora", feat6:"Rozvoz",
+    adv_tag:"Proč Sandokan", adv_title:"Proč si nás zamilujete",
+    adv1_title:"100% rostlinné", adv1_text:"Vše bez masa, bez mléka, bez vajec. Spoléháme na kvalitní suroviny a autentické koření.",
+    adv2_title:"Vždy čerstvé", adv2_text:"Vše se vaří ráno před otevřením. Při příchodu v 11:15 je bufet naplněn tím nejčerstvějším jídlem dne.",
+    adv3_title:"Platíte za gramáž", adv3_text:"Samoobslužný bufet — sami si naložíte kolik chcete a platíte 39 Kč za 100 g. Nebo si objednáte jídla s pevnou cenou.",
+    adv4_title:"Indická fúze", adv4_text:"Curry, guláš, souvlaki, tacos, salátové misy — každý den jiná nabídka. Inspirace z celého světa, srdce v Indii.",
+    adv5_title:"Bez cukru & lepku", adv5_text:"Naprostá většina pokrmů je bez cukru a bez lepku. Ideální pro celiaky a ty, kdo pečují o zdraví.",
+    adv6_title:"Útulná atmosféra", adv6_text:"Posezení uvnitř i v zahradě. Přátelský personál, příjemná hudba a pocit domova.",
+    menu_tag:"Jídelní lístek", menu_title:"Naše speciality", menu_desc:"Bufet se každý den mění — níže jsou naše oblíbené stálice a typické kategorie.",
+    tab_all:"Vše", tab_hot:"Teplá jídla", tab_salad:"Saláty", tab_bowl:"Bowls", tab_drinks:"Nápoje",
+    menu_note:"Denní nabídka bufetu se mění — sledujte nás na Facebooku pro aktuální menu. Vše je 100% vegan.",
+    contact_tag:"Kontakt", contact_title:"Navštivte nás",
+    hours_title:"Otevírací doba", mon_thu:"Pondělí – Čtvrtek", fri:"Pátek", sat_sun:"Sobota – Neděle", closed:"Zavřeno",
+    delivery_text:'Rozvoz přes <strong style="color:var(--lime);">Wolt</strong> a <strong style="color:var(--lime);">Bolt Food</strong> — objednejte online!',
+    addr_label:"Adresa", phone_label:"Telefon", web_label:"Web",
+    directions_btn:"🗺️ Trasa v Google Maps",
+    map_tag:"Kde nás najdete", map_title:"Praha 3 – Vinohrady",
+    footer_tagline:"Praha 3 · Vinohrady · 100% Vegan · Est. 2017",
+    footer_copy:"© 2025 Sandokan Vegan Bistro. Všechna práva vyhrazena."
+  },
+  en: {
+    nav_about:"About", nav_adv:"Why Us", nav_menu:"Menu", nav_contact:"Contact",
+    hero_badge:"Prague 3 · Vinohrady · Est. 2017",
+    hero_title1:"Fresh &", hero_title2:"Vegan", hero_title3:"Food",
+    hero_sub:"Self-serve buffet with Indian-fusion flavours. Daily changing, 100% vegan and mostly gluten-free dishes.",
+    hero_btn1:"🌱 Explore menu", hero_btn2:"Find us",
+    stat_rating:"Google Rating", stat_vegan:"Vegan", stat_since:"Founded",
+    scroll_down:"Scroll",
+    about_tag:"About us",
+    about_desc1:"Since 2017, Sandokan Vegan Bistro has been serving high-quality, freshly-made dishes with Indian flavours. Everything is prepared fresh each morning — when we open at 11:15, the buffet is at its very best.",
+    about_desc2:"Our self-serve buffet changes every day — salad bar, hot dishes, soups. Pay by weight (39 CZK / 100g) or order à la carte: tacos, bowls, souvlaki and more.",
+    badge_per100:"per 100g",
+    feat1:"Daily buffet", feat2:"Gluten-free", feat3:"100% Vegan", feat4:"Indian fusion", feat5:"Obora beer", feat6:"Delivery",
+    adv_tag:"Why Sandokan", adv_title:"Why you'll love us",
+    adv1_title:"100% plant-based", adv1_text:"No meat, no dairy, no eggs. Quality ingredients and authentic spices — no compromises.",
+    adv2_title:"Always fresh", adv2_text:"Everything is cooked fresh each morning. Arrive at 11:15 and enjoy the freshest food of the day.",
+    adv3_title:"Pay by weight", adv3_text:"Self-serve buffet — take as much as you want at 39 CZK per 100g, or order fixed-price dishes.",
+    adv4_title:"Indian fusion", adv4_text:"Curry, goulash, souvlaki, tacos, salad bowls — different every day. Global inspiration, Indian soul.",
+    adv5_title:"Sugar-free & GF", adv5_text:"The vast majority of dishes are sugar-free and gluten-free. Perfect for coeliacs and health-conscious guests.",
+    adv6_title:"Cosy atmosphere", adv6_text:"Seating inside and in the garden. Friendly staff, great playlist, feels like home.",
+    menu_tag:"Menu", menu_title:"Our specialities", menu_desc:"The buffet changes daily — below are our favourites and typical categories.",
+    tab_all:"All", tab_hot:"Hot dishes", tab_salad:"Salads", tab_bowl:"Bowls", tab_drinks:"Drinks",
+    menu_note:"The daily buffet changes — follow us on Facebook for today's menu. Everything is 100% vegan.",
+    contact_tag:"Contact", contact_title:"Visit us",
+    hours_title:"Opening hours", mon_thu:"Monday – Thursday", fri:"Friday", sat_sun:"Saturday – Sunday", closed:"Closed",
+    delivery_text:'Delivery via <strong style="color:var(--lime);">Wolt</strong> and <strong style="color:var(--lime);">Bolt Food</strong> — order online!',
+    addr_label:"Address", phone_label:"Phone", web_label:"Website",
+    directions_btn:"🗺️ Get directions",
+    map_tag:"Find us", map_title:"Prague 3 – Vinohrady",
+    footer_tagline:"Prague 3 · Vinohrady · 100% Vegan · Est. 2017",
+    footer_copy:"© 2025 Sandokan Vegan Bistro. All rights reserved."
+  },
+  de: {
+    nav_about:"Über uns", nav_adv:"Vorteile", nav_menu:"Speisekarte", nav_contact:"Kontakt",
+    hero_badge:"Prag 3 · Vinohrady · Seit 2017",
+    hero_title1:"Frisch &", hero_title2:"Vegan", hero_title3:"Genießen",
+    hero_sub:"Selbstbedienungsbuffet mit indischen Aromen. Täglich wechselnde, 100% vegane und meist glutenfreie Gerichte.",
+    hero_btn1:"🌱 Speisekarte ansehen", hero_btn2:"So finden Sie uns",
+    stat_rating:"Google Bewertung", stat_vegan:"Vegan", stat_since:"Gegründet",
+    scroll_down:"Scrollen",
+    about_tag:"Über uns",
+    about_desc1:"Seit 2017 bereitet Sandokan Vegan Bistro hochwertige und frische Gerichte mit indischen Aromen zu. Alles wird morgens frisch zubereitet — wenn wir um 11:15 Uhr öffnen, ist das Buffet auf dem Höhepunkt.",
+    about_desc2:"Unser Selbstbedienungsbuffet wechselt täglich — Salatbar, warme Speisen, Suppen. Zahlen Sie nach Gewicht (39 CZK / 100g) oder bestellen Sie à la carte.",
+    badge_per100:"pro 100g",
+    feat1:"Tagesbuffet", feat2:"Glutenfrei", feat3:"100% Vegan", feat4:"Indische Fusion", feat5:"Obora Bier", feat6:"Lieferung",
+    adv_tag:"Warum Sandokan", adv_title:"Warum Sie uns lieben werden",
+    adv1_title:"100% pflanzlich", adv1_text:"Kein Fleisch, keine Milch, keine Eier. Qualitätszutaten und authentische Gewürze — keine Kompromisse.",
+    adv2_title:"Immer frisch", adv2_text:"Alles wird jeden Morgen frisch gekocht. Kommen Sie um 11:15 Uhr und genießen Sie das frischeste Essen des Tages.",
+    adv3_title:"Zahlen nach Gewicht", adv3_text:"Selbstbedienungsbuffet — nehmen Sie so viel Sie möchten für 39 CZK pro 100g oder bestellen Sie Gerichte zum Festpreis.",
+    adv4_title:"Indische Fusion", adv4_text:"Curry, Gulasch, Souvlaki, Tacos, Salatschüsseln — jeden Tag anders. Globale Inspiration, indische Seele.",
+    adv5_title:"Zuckerfrei & GF", adv5_text:"Die überwiegende Mehrheit der Gerichte ist zucker- und glutenfrei. Ideal für Zöliakiepatienten.",
+    adv6_title:"Gemütliche Atmosphäre", adv6_text:"Sitzplätze drinnen und im Garten. Freundliches Personal, tolle Musik, fühlt sich wie zu Hause an.",
+    menu_tag:"Speisekarte", menu_title:"Unsere Spezialitäten", menu_desc:"Das Buffet wechselt täglich — unten sind unsere Favoriten und typischen Kategorien.",
+    tab_all:"Alle", tab_hot:"Warme Gerichte", tab_salad:"Salate", tab_bowl:"Bowls", tab_drinks:"Getränke",
+    menu_note:"Das Tagesbuffet wechselt — folgen Sie uns auf Facebook für das aktuelle Menü. Alles ist 100% vegan.",
+    contact_tag:"Kontakt", contact_title:"Besuchen Sie uns",
+    hours_title:"Öffnungszeiten", mon_thu:"Montag – Donnerstag", fri:"Freitag", sat_sun:"Samstag – Sonntag", closed:"Geschlossen",
+    delivery_text:'Lieferung über <strong style="color:var(--lime);">Wolt</strong> und <strong style="color:var(--lime);">Bolt Food</strong> — jetzt online bestellen!',
+    addr_label:"Adresse", phone_label:"Telefon", web_label:"Website",
+    directions_btn:"🗺️ Route in Google Maps",
+    map_tag:"So finden Sie uns", map_title:"Prag 3 – Vinohrady",
+    footer_tagline:"Prag 3 · Vinohrady · 100% Vegan · Seit 2017",
+    footer_copy:"© 2025 Sandokan Vegan Bistro. Alle Rechte vorbehalten."
+  },
+  ru: {
+    nav_about:"О нас", nav_adv:"Преимущества", nav_menu:"Меню", nav_contact:"Контакты",
+    hero_badge:"Прага 3 · Виноградь · С 2017",
+    hero_title1:"Свежая &", hero_title2:"Веганская", hero_title3:"Еда",
+    hero_sub:"Шведский стол с индийскими вкусами. Ежедневно обновляемые блюда — 100% веганские и преимущественно без глютена.",
+    hero_btn1:"🌱 Смотреть меню", hero_btn2:"Как нас найти",
+    stat_rating:"Рейтинг Google", stat_vegan:"Веган", stat_since:"Основан",
+    scroll_down:"Прокрутить",
+    about_tag:"О нас",
+    about_desc1:"С 2017 года Sandokan Vegan Bistro готовит высококачественные свежие блюда с индийскими вкусами. Всё готовится утром — когда мы открываемся в 11:15, шведский стол максимально свеж.",
+    about_desc2:"Наш шведский стол меняется каждый день — салатный бар, горячие блюда, супы. Платите по весу (39 крон/100г) или заказывайте блюда по фиксированной цене: тако, боулы, сувлаки.",
+    badge_per100:"за 100г",
+    feat1:"Ежедневный буфет", feat2:"Без глютена", feat3:"100% Веган", feat4:"Индийский фьюжн", feat5:"Пиво Obora", feat6:"Доставка",
+    adv_tag:"Почему Sandokan", adv_title:"Почему вы полюбите нас",
+    adv1_title:"100% растительное", adv1_text:"Без мяса, без молока, без яиц. Качественные ингредиенты и аутентичные специи — без компромиссов.",
+    adv2_title:"Всегда свежее", adv2_text:"Всё готовится каждое утро. Приходите в 11:15 и наслаждайтесь самым свежим едой дня.",
+    adv3_title:"Оплата по весу", adv3_text:"Самообслуживание — берите сколько хотите за 39 крон/100г, или заказывайте блюда по фиксированной цене.",
+    adv4_title:"Индийский фьюжн", adv4_text:"Карри, гуляш, сувлаки, тако, боулы — каждый день разное меню. Глобальное вдохновение, индийская душа.",
+    adv5_title:"Без сахара и глютена", adv5_text:"Подавляющее большинство блюд без сахара и глютена. Идеально для людей с целиакией.",
+    adv6_title:"Уютная атмосфера", adv6_text:"Места внутри и в садике. Дружелюбный персонал, приятная музыка, ощущение дома.",
+    menu_tag:"Меню", menu_title:"Наши специалитеты", menu_desc:"Буфет меняется ежедневно — ниже наши любимые позиции и типичные категории.",
+    tab_all:"Все", tab_hot:"Горячие блюда", tab_salad:"Салаты", tab_bowl:"Боулы", tab_drinks:"Напитки",
+    menu_note:"Ежедневное меню меняется — следите за нами на Facebook. Всё 100% веганское.",
+    contact_tag:"Контакты", contact_title:"Посетите нас",
+    hours_title:"Время работы", mon_thu:"Понедельник – Четверг", fri:"Пятница", sat_sun:"Суббота – Воскресенье", closed:"Закрыто",
+    delivery_text:'Доставка через <strong style="color:var(--lime);">Wolt</strong> и <strong style="color:var(--lime);">Bolt Food</strong> — заказывайте онлайн!',
+    addr_label:"Адрес", phone_label:"Телефон", web_label:"Сайт",
+    directions_btn:"🗺️ Маршрут в Google Maps",
+    map_tag:"Как нас найти", map_title:"Прага 3 – Виноградь",
+    footer_tagline:"Прага 3 · Виноградь · 100% Веган · С 2017",
+    footer_copy:"© 2025 Sandokan Vegan Bistro. Все права защищены."
   }
-}
-initParticles();
+};
 
-function animateParticles() {
-  ctx.clearRect(0, 0, W, H);
-  const maxDist = Math.min(W, H) * 0.18; // Max distance for lines
-
-  particles.forEach(p => {
-    // Update position
-    p.x += p.vx;
-    p.y += p.vy;
-
-    // Wrap around edges
-    if (p.x < 0) p.x = W;
-    if (p.x > W) p.x = 0;
-    if (p.y < 0) p.y = H;
-    if (p.y > H) p.y = 0;
-
-    // Draw particle
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255, 193, 7, ${p.a})`; // Use accent gold
-    ctx.fill();
-  });
-
-  // Draw lines between nearby particles
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-
-      if (dist < maxDist) {
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        const alpha = 0.07 * (1 - dist / maxDist); // Scale alpha with distance
-        ctx.strokeStyle = `rgba(76,175,80, ${alpha})`; // Use primary green for lines
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-      }
-    }
-  }
-  animationFrameId = requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-window.addEventListener('resize', () => {
-  cancelAnimationFrame(animationFrameId);
-  resizeCanvas();
-  initParticles();
-  animateParticles();
-});
-
-/* ─── CURSOR GLOW EFFECT ─── */
-const cursorGlow = document.getElementById('cursorGlow');
-let cursorVisible = false;
-
-document.addEventListener('mousemove', e => {
-  if (!cursorVisible) {
-      cursorGlow.classList.add('visible');
-      cursorVisible = true;
-  }
-  // Use requestAnimationFrame for smoother updates
-  requestAnimationFrame(() => {
-      cursorGlow.style.left = e.clientX + 'px';
-      cursorGlow.style.top = e.clientY + 'px';
-  });
-});
-
-// Hide cursor when mouse leaves the window
-document.addEventListener('mouseleave', () => {
-    cursorGlow.classList.remove('visible');
-    cursorVisible = false;
-});
-// Show cursor when mouse enters the window
-document.addEventListener('mouseenter', () => {
-    cursorGlow.classList.add('visible');
-    cursorVisible = true;
-});
-
-/* ─── NAVBAR STICKY & SCROLL EFFECT ─── */
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-/* ─── MOBILE MENU TOGGLE ─── */
-function toggleMobile() {
-  const mobileMenu = document.getElementById('mobileMenu');
-  const burgerIcon = document.getElementById('burger');
-  mobileMenu.classList.toggle('open');
-  burgerIcon.classList.toggle('open');
-  document.body.style.overflowY = mobileMenu.classList.contains('open') ? 'hidden' : ''; // Prevent background scroll
-}
-function closeMobile() {
-  document.getElementById('mobileMenu').classList.remove('open');
-  document.getElementById('burger').classList.remove('open');
-  document.body.style.overflowY = '';
-}
-
-/* ─── LANGUAGE SWITCHER LOGIC ─── */
 let currentLang = 'cs';
 
 function setLang(lang) {
   currentLang = lang;
-  document.querySelectorAll('[data-lang]').forEach(el => {
-    el.classList.toggle('active-lang', el.dataset.lang === lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === lang));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
   });
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
-  });
-  document.documentElement.lang = lang; // Set HTML lang attribute
+  renderMenu();
 }
 
-/* ─── SCROLL REVEAL ANIMATION ─── */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      // Optional: Unobserve after revealing to improve performance
-      // revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+// ---- MENU DATA ----
+const menuItems = [
+  { id:1, cat:'hot', emoji:'🍛', title:{cs:'Zeleninové curry',en:'Vegetable curry',de:'Gemüse-Curry',ru:'Овощное карри'}, desc:{cs:'Aromatické curry s kokosovým mlékem a sezónní zeleninou',en:'Aromatic curry with coconut milk and seasonal vegetables',de:'Aromatisches Curry mit Kokosmilch und Saisongemüse',ru:'Ароматное карри с кокосовым молоком и сезонными овощами'}, badges:['V','GF'] },
+  { id:2, cat:'hot', emoji:'🥘', title:{cs:'Veganský guláš',en:'Vegan goulash',de:'Veganes Gulasch',ru:'Веганский гуляш'}, desc:{cs:'Česká klasika v rostlinné verzi — bohatý a sytý guláš se sójovým masem',en:'Czech classic plant-based — rich and hearty goulash with soy protein',de:'Tschechischer Klassiker pflanzlich — reichhaltiges Gulasch mit Sojaprotein',ru:'Чешская классика по-вегански — насыщенный гуляш с соевым белком'}, badges:['V'] },
+  { id:3, cat:'bowl', emoji:'🥗', title:{cs:'Sandokan bowl',en:'Sandokan bowl',de:'Sandokan Bowl',ru:'Сандокан боул'}, desc:{cs:'Mísa se salátem, pečenou zeleninou, hummusem a domácím dresinkem',en:'Bowl with salad, roasted veg, hummus and house dressing',de:'Schüssel mit Salat, geröstetem Gemüse, Hummus und Hausdressing',ru:'Боул с салатом, запечёнными овощами, хумусом и домашним соусом'}, badges:['V','GF'], price:'149 Kč' },
+  { id:4, cat:'bowl', emoji:'🍜', title:{cs:'Bún bò Nam Bộ',en:'Bun Bo Nam Bo',de:'Bun Bo Nam Bo',ru:'Бун Бо Нам Бо'}, desc:{cs:'Rýžové nudle se zeleninou, bylinkami a marinovaným tofu',en:'Rice noodles with vegetables, herbs and marinated tofu',de:'Reisnudeln mit Gemüse, Kräutern und mariniertem Tofu',ru:'Рисовая лапша с овощами, зеленью и маринованным тофу'}, badges:['V','GF'], price:'149 Kč' },
+  { id:5, cat:'hot', emoji:'🌮', title:{cs:'Vegan tacos',en:'Vegan tacos',de:'Vegane Tacos',ru:'Веганские тако'}, desc:{cs:'Tortilla s kořeněným tofu nebo tempehem, salsou a avokádem',en:'Tortilla with spiced tofu or tempeh, salsa and avocado',de:'Tortilla mit gewürztem Tofu oder Tempeh, Salsa und Avocado',ru:'Тортилья с пряным тофу или темпе, сальсой и авокадо'}, badges:['V'], price:'129 Kč' },
+  { id:6, cat:'salad', emoji:'🥬', title:{cs:'Denní salátový bar',en:'Daily salad bar',de:'Täglicher Salatbuffet',ru:'Ежедневный салатный бар'}, desc:{cs:'Vždy čerstvý výběr salátů — každý den jiný. Platíte 39 Kč za 100g',en:'Always fresh salad selection — different every day. 39 CZK per 100g',de:'Immer frische Salatauswahl — täglich anders. 39 CZK pro 100g',ru:'Всегда свежий выбор салатов — каждый день разный. 39 крон/100г'}, badges:['V','GF'], price:'39 Kč/100g' },
+  { id:7, cat:'bowl', emoji:'🧆', title:{cs:'Tofu souvlaki',en:'Tofu souvlaki',de:'Tofu Souvlaki',ru:'Тофу сувлаки'}, desc:{cs:'Marinované tofu na grilu s tzatziki a pikovým salátem',en:'Grilled marinated tofu with tzatziki and fresh salad',de:'Gegrilltes mariniertes Tofu mit Tzatziki und frischem Salat',ru:'Жареное маринованное тофу с дзадзики и свежим салатом'}, badges:['V'], price:'149 Kč' },
+  { id:8, cat:'drinks', emoji:'🍹', title:{cs:'Maracujová kombucha',en:'Passionfruit kombucha',de:'Maracuja-Kombucha',ru:'Комбуча с маракуйей'}, desc:{cs:'Domácí kombucha s maracují — nejlepší kombucha, jakou jsme kdy pili!',en:'House-made passionfruit kombucha — the best kombucha you\'ve ever had!',de:'Hausgemachte Maracuja-Kombucha — beste Kombucha, die wir je getrunken haben!',ru:'Домашняя комбуча с маракуйей — лучшая комбуча, которую мы пробовали!'}, badges:['V','GF'], price:'59 Kč' },
+];
 
-document.querySelectorAll('.reveal').forEach(el => {
-  revealObserver.observe(el);
-});
+function renderMenu(cat='all') {
+  const grid = document.getElementById('menuGrid');
+  const items = cat === 'all' ? menuItems : menuItems.filter(i => i.cat === cat);
+  grid.innerHTML = items.map(item => `
+    <div class="menu-card reveal" data-cat="${item.cat}">
+      <div class="menu-card-img">${item.emoji}</div>
+      <div class="menu-card-body">
+        <div class="menu-card-tag">${{hot:{cs:'Teplé jídlo',en:'Hot dish',de:'Warmes Gericht',ru:'Горячее'},salad:{cs:'Salát',en:'Salad',de:'Salat',ru:'Салат'},bowl:{cs:'Bowl',en:'Bowl',de:'Bowl',ru:'Боул'},drinks:{cs:'Nápoje',en:'Drinks',de:'Getränke',ru:'Напитки'}}[item.cat][currentLang]}</div>
+        <div class="menu-card-title">${item.title[currentLang]}</div>
+        <div class="menu-card-desc">${item.desc[currentLang]}</div>
+        ${item.price ? `<div class="menu-card-price">${item.price}</div>` : ''}
+        <div class="menu-card-badges">
+          ${item.badges.includes('V') ? '<span class="badge badge-v">Vegan</span>' : ''}
+          ${item.badges.includes('GF') ? '<span class="badge badge-gf">GF</span>' : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  // trigger reveal
+  setTimeout(() => grid.querySelectorAll('.reveal').forEach(el => el.classList.add('visible')), 50);
+}
 
-/* ─── CARD ANIMATIONS (Staggered Reveal) ─── */
-const cardObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, index) => {
-    if (entry.isIntersecting) {
-      // Apply a staggered delay for a cascading effect
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, index * 150); // Adjust delay as needed (e.g., 150ms per card)
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.feature-card, .service-card, .menu-item').forEach(card => {
-  cardObserver.observe(card);
-});
-
-/* ─── MENU FILTER LOGIC ─── */
-function filterMenu(category) {
-  const menuGrid = document.getElementById('menuGrid');
-  menuGrid.style.opacity = '0'; // Fade out before filtering
-
-  setTimeout(() => {
-    document.querySelectorAll('.menu-item').forEach(item => {
-      const itemCategory = item.dataset.cat;
-      const showItem = category === 'all' || itemCategory === category;
-      item.style.display = showItem ? '' : 'none'; // Use '' to revert to default display or 'block' etc.
-    });
-    menuGrid.style.opacity = '1'; // Fade in after filtering
-  }, 250); // Match fade duration
-
-  // Update active button state
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
+function filterMenu(cat) {
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
   event.target.classList.add('active');
+  const grid = document.getElementById('menuGrid');
+  grid.style.opacity = '0';
+  setTimeout(() => {
+    renderMenu(cat);
+    grid.style.opacity = '1';
+  }, 250);
+  grid.style.transition = 'opacity .25s';
 }
 
-/* ─── INITIALIZE LANGUAGE ON LOAD ─── */
-document.addEventListener('DOMContentLoaded', () => {
-    const browserLang = navigator.language.slice(0, 2).toLowerCase();
-    let initialLang = 'cs'; // Default to Czech
-    if (browserLang === 'en') initialLang = 'en';
-    else if (browserLang === 'de') initialLang = 'de';
-    else if (browserLang === 'ru') initialLang = 'ru';
-    // Check if a language button for the detected language exists
-    const langButton = document.querySelector(`.lang-btn[onclick*="'${initialLang}'"]`);
-    if (langButton) {
-        setLang(initialLang);
-    } else {
-        setLang('cs'); // Fallback to Czech if detected language button isn't found
-    }
+// ---- PARTICLES ----
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 8 + 's';
+    p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+    p.style.opacity = (.1 + Math.random() * .4);
+    container.appendChild(p);
+  }
+}
+
+// ---- CURSOR ----
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+function animRing() { rx += (mx - rx) * .12; ry += (my - ry) * .12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); }
+animRing();
+document.querySelectorAll('a,button,.adv-card,.menu-card,.feature-chip').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
 });
 
+// ---- NAVBAR SCROLL ----
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60);
+});
+
+// ---- MOBILE MENU ----
+function toggleMobile() {
+  document.getElementById('navMobile').classList.toggle('open');
+}
+
+// ---- SCROLL REVEAL ----
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: .12 });
+function initReveal() {
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => obs.observe(el));
+}
+
+// ---- LOADER ----
+window.addEventListener('load', () => {
+  createParticles();
+  renderMenu();
+  setLang('cs');
+  initReveal();
+  setTimeout(() => {
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    loader.style.transition = 'opacity .6s';
+    setTimeout(() => loader.style.display = 'none', 600);
+  }, 2000);
+});
 </script>
 </body>
 </html>
